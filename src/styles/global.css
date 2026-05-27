@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "@fontsource/space-mono/400.css";
 @import "@fontsource/space-mono/700.css";
+@import "@fontsource/source-serif-4/400.css";
+@import "@fontsource/source-serif-4/600.css";
 
 @theme {
   --color-paper: #f7f7f5;
@@ -13,7 +15,9 @@
   --color-line-strong: #b7b7b0;
   --color-code: #ededeb;
   --color-selection: #d9d9d4;
-  --font-mono: "Space Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  --font-mono:
+    "Space Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  --font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
 }
 
 @layer base {
@@ -26,7 +30,7 @@
   }
 
   html {
-    @apply bg-paper text-ink font-mono leading-normal;
+    @apply bg-panel text-ink font-mono leading-normal;
   }
 
   body {
@@ -48,7 +52,11 @@
   }
 
   .hero-title {
-    @apply m-0 w-full max-w-none text-[clamp(3rem,10vw,7rem)] leading-[0.9] tracking-normal;
+    @apply m-0 w-full max-w-none text-[clamp(2.25rem,7vw,4.5rem)] leading-[1.05] tracking-normal;
+  }
+
+  .article-title {
+    @apply m-0 w-full max-w-none text-[clamp(1.875rem,4.5vw,3rem)] leading-[1.15] tracking-normal;
   }
 
   .hero-copy {
@@ -56,11 +64,47 @@
   }
 
   .markdown-content {
-    @apply w-full max-w-none py-[clamp(2rem,7vw,4rem)] pb-20;
+    @apply w-full max-w-[72ch] rounded-xl border border-line bg-paper px-[clamp(1rem,3vw,2.25rem)] pb-20 pt-8;
+  }
+
+  .article-layout {
+    @apply mt-8 grid gap-10 lg:mt-10 lg:grid-cols-[minmax(0,72ch)_minmax(16rem,1fr)] lg:items-start;
+  }
+
+  .toc-shell {
+    @apply hidden self-start lg:sticky lg:top-8 lg:block;
+  }
+
+  .toc-nav {
+    @apply rounded-lg border border-line bg-paper p-4;
+  }
+
+  .toc-header {
+    @apply mb-3 flex items-center justify-between gap-3;
+  }
+
+  .toc-title {
+    @apply m-0 font-mono text-xs uppercase tracking-wide text-muted;
+  }
+
+  .toc-toggle {
+    @apply rounded border border-line px-2 py-1 font-mono text-[0.7rem] uppercase tracking-wide text-muted hover:text-ink focus-visible:text-ink;
+  }
+
+  .toc-body {
+    @apply max-h-[calc(100vh-11rem)] overflow-y-auto pr-1;
+  }
+
+  .toc-list {
+    @apply m-0 list-none space-y-1 p-0;
+  }
+
+  .toc-link {
+    @apply block rounded-sm py-1 text-sm leading-[1.35] text-muted no-underline underline-offset-[0.18em] hover:text-ink hover:underline focus-visible:text-ink focus-visible:underline;
   }
 
   .markdown-content > :first-child {
-    @apply mt-0;
+    @apply mt-0 border-none;
   }
 
   .markdown-content h1,
@@ -71,24 +115,25 @@
   }
 
   .markdown-content h1 {
-    @apply mt-0 mb-6 text-[clamp(2.1rem,6vw,4rem)];
+    @apply mt-0 mb-6 text-[clamp(1.875rem,4.5vw,3rem)];
   }
 
   .markdown-content h2 {
-    @apply mt-12 mb-4 border-t border-line pt-6 text-[clamp(1.65rem,4vw,2.45rem)];
+    @apply mt-12 mb-4 border-none pt-0 text-[clamp(1.5rem,3.5vw,2.25rem)];
   }
 
   .markdown-content h3 {
-    @apply mt-9 mb-3 text-[clamp(1.28rem,3vw,1.65rem)];
+    @apply mt-9 mb-3 text-[clamp(1.25rem,2.6vw,1.75rem)];
   }
 
   .markdown-content h4 {
-    @apply mt-7 mb-2 text-[1.08rem];
+    @apply mt-7 mb-2 text-[clamp(1.125rem,2.2vw,1.375rem)];
   }
 
   .markdown-content p,
   .markdown-content li {
-    @apply text-base leading-[1.78] text-ink;
+    @apply text-[1.04rem] leading-[1.82] text-ink;
+    font-family: var(--font-serif);
   }
 
   .markdown-content p {
@@ -142,6 +187,6 @@
   }
 
   .markdown-content hr {
-    @apply my-8 border-0 border-t border-line;
+    @apply hidden;
   }
 }
