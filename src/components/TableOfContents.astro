@@ -1,0 +1,63 @@
+---
+interface Heading {
+	depth: number;
+	slug: string;
+	text: string;
+}
+
+interface Props {
+	headings: Heading[];
+}
+
+const { headings } = Astro.props;
+const tocId = `toc-items-${Astro.url.pathname.replaceAll('/', '-').replace(/^-+|-+$/g, '') || 'post'}`;
+---
+
+{
+	headings.length > 0 && (
+		<aside class="toc-shell" aria-label="Table of contents">
+			<nav class="toc-nav">
+				<div class="toc-header">
+					<p class="toc-title">On this page</p>
+					<button
+						type="button"
+						class="toc-toggle"
+						aria-expanded="true"
+						aria-controls={tocId}
+						data-toc-toggle
+					>
+						Toggle
+					</button>
+				</div>
+				<div id={tocId} class="toc-body" data-toc-body>
+					<ul class="toc-list">
+						{headings.map((heading) => (
+							<li>
+								<a
+									href={`#${heading.slug}`}
+									class="toc-link"
+									style={`padding-left: ${heading.depth === 3 ? '0.9rem' : '0'};`}
+								>
+									{heading.text}
+								</a>
+							</li>
+						))}
+					</ul>
+				</div>
+			</nav>
+		</aside>
+	)
+}
+
+<script>
+	const toggle = document.querySelector('[data-toc-toggle]');
+	const body = document.querySelector('[data-toc-body]');
+
+	if (toggle instanceof HTMLButtonElement && body instanceof HTMLElement) {
+		toggle.addEventListener('click', () => {
+			const expanded = toggle.getAttribute('aria-expanded') === 'true';
+			toggle.setAttribute('aria-expanded', String(!expanded));
+			body.hidden = expanded;
+		});
+	}
+</script>
