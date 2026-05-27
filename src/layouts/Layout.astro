@@ -1,0 +1,41 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const {
+	title = 'Blogy',
+	description = 'Personal notes and technical articles.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="description" content={description} />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body>
+		<header class="page-shell py-8 pb-5">
+			<nav
+				class="flex flex-col items-start justify-between gap-4 border-b border-line pb-4 sm:flex-row sm:items-center"
+				aria-label="Main navigation"
+			>
+				<a class="font-bold no-underline" href="/">Blogy</a>
+				<div class="flex gap-4 text-[0.95rem] text-muted">
+					<a class="no-underline underline-offset-[0.18em] hover:text-ink hover:underline focus-visible:text-ink focus-visible:underline" href="/">Home</a>
+					<a class="no-underline underline-offset-[0.18em] hover:text-ink hover:underline focus-visible:text-ink focus-visible:underline" href="/blog/redis/">Redis</a>
+				</div>
+			</nav>
+		</header>
+		<slot />
+	</body>
+</html>

@@ -1,0 +1,147 @@
+@import "tailwindcss";
+@import "@fontsource/space-mono/400.css";
+@import "@fontsource/space-mono/700.css";
+
+@theme {
+  --color-paper: #f7f7f5;
+  --color-panel: #ffffff;
+  --color-panel-muted: #eeeeeb;
+  --color-ink: #171717;
+  --color-muted: #5f5f5b;
+  --color-faint: #8b8b86;
+  --color-line: #d7d7d2;
+  --color-line-strong: #b7b7b0;
+  --color-code: #ededeb;
+  --color-selection: #d9d9d4;
+  --font-mono: "Space Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  ::selection {
+    @apply bg-selection;
+  }
+
+  html {
+    @apply bg-paper text-ink font-mono leading-normal;
+  }
+
+  body {
+    @apply m-0 min-w-80;
+  }
+
+  a {
+    @apply text-inherit;
+  }
+}
+
+@layer components {
+  .page-shell {
+    @apply mx-auto w-[min(100%-1.25rem,1120px)] sm:w-[min(100%-2rem,1120px)];
+  }
+
+  .eyebrow {
+    @apply m-0 font-mono text-[0.82rem] text-muted uppercase;
+  }
+
+  .hero-title {
+    @apply m-0 w-full max-w-none text-[clamp(3rem,10vw,7rem)] leading-[0.9] tracking-normal;
+  }
+
+  .hero-copy {
+    @apply m-0 w-full max-w-none text-[clamp(1.03rem,2.5vw,1.25rem)] leading-[1.7] text-muted;
+  }
+
+  .markdown-content {
+    @apply w-full max-w-none py-[clamp(2rem,7vw,4rem)] pb-20;
+  }
+
+  .markdown-content > :first-child {
+    @apply mt-0;
+  }
+
+  .markdown-content h1,
+  .markdown-content h2,
+  .markdown-content h3,
+  .markdown-content h4 {
+    @apply text-ink leading-[1.12] tracking-normal;
+  }
+
+  .markdown-content h1 {
+    @apply mt-0 mb-6 text-[clamp(2.1rem,6vw,4rem)];
+  }
+
+  .markdown-content h2 {
+    @apply mt-12 mb-4 border-t border-line pt-6 text-[clamp(1.65rem,4vw,2.45rem)];
+  }
+
+  .markdown-content h3 {
+    @apply mt-9 mb-3 text-[clamp(1.28rem,3vw,1.65rem)];
+  }
+
+  .markdown-content h4 {
+    @apply mt-7 mb-2 text-[1.08rem];
+  }
+
+  .markdown-content p,
+  .markdown-content li {
+    @apply text-base leading-[1.78] text-ink;
+  }
+
+  .markdown-content p {
+    @apply my-4;
+  }
+
+  .markdown-content ul,
+  .markdown-content ol {
+    @apply my-4 mb-5 pl-5;
+  }
+
+  .markdown-content li + li {
+    @apply mt-1;
+  }
+
+  .markdown-content blockquote {
+    @apply my-6 border-l-4 border-ink py-2 pl-4 text-muted;
+  }
+
+  .markdown-content blockquote p {
+    @apply m-0 text-[1.08rem] text-muted;
+  }
+
+  .markdown-content code {
+    @apply rounded border border-line bg-code px-1 py-0.5 font-mono text-[0.9em];
+  }
+
+  .markdown-content pre {
+    @apply my-5 overflow-x-auto rounded-lg border border-line bg-panel p-4;
+  }
+
+  .markdown-content pre code {
+    @apply block border-0 bg-transparent p-0 text-[0.88rem] leading-[1.65];
+  }
+
+  .markdown-content table {
+    @apply my-6 block w-full overflow-x-auto border-collapse text-[0.95rem];
+  }
+
+  .markdown-content th,
+  .markdown-content td {
+    @apply border border-line px-3 py-3 text-left align-top;
+  }
+
+  .markdown-content th {
+    @apply bg-panel-muted font-bold text-ink;
+  }
+
+  .markdown-content tr:nth-child(even) td {
+    @apply bg-panel/50;
+  }
+
+  .markdown-content hr {
+    @apply my-8 border-0 border-t border-line;
+  }
+}
