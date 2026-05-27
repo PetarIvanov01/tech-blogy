@@ -1,4 +1,9 @@
-# Kubernetes Notes
+---
+title: "Kubernetes Explained: Pods, Deployments, Services, and Production Basics"
+description: "A practical Kubernetes guide covering core architecture, Pods, Deployments, Services, probes, ConfigMaps, Secrets, storage, Ingress, and common production mental models."
+pubDate: 2026-05-27
+tags: ["kubernetes", "containers", "devops", "distributed-systems", "backend"]
+---
 
 ## What Problem Kubernetes Solves
 
