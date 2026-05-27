@@ -142,11 +142,27 @@
 
   .markdown-content ul,
   .markdown-content ol {
-    @apply my-4 mb-5 pl-5;
+    @apply my-5 mb-6 pl-6;
+  }
+
+  .markdown-content ul {
+    @apply list-disc;
+  }
+
+  .markdown-content ol {
+    @apply list-decimal;
   }
 
   .markdown-content li + li {
-    @apply mt-1;
+    @apply mt-2;
+  }
+
+  .markdown-content li::marker {
+    color: var(--color-muted);
+  }
+
+  .markdown-content ul li::marker {
+    font-size: 0.95em;
   }
 
   .markdown-content blockquote {
