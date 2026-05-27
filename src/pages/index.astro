@@ -22,7 +22,7 @@ const posts = (await getCollection('blog')).sort(
 			</p>
 		</section>
 
-		<section aria-label="Articles">
+		<section id="articles" aria-label="Articles">
 			{posts.map((post) => (
 				<BlogPostCard
 					href={`/blog/${post.id}/`}
