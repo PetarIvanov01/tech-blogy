@@ -69,17 +69,68 @@ Even if each Pod contains one container, Kubernetes still manages Pods, not raw 
 
 ## High-Level Architecture
 
-```text
-kubectl -> API Server -> etcd
-                     -> Scheduler
-                     -> Controller Manager
-                     -> Worker Nodes
-                           -> kubelet
-                           -> kube-proxy
-                           -> Pods
+<div class="architecture-diagram" aria-label="Kubernetes high-level architecture">
+  <div class="arch-node arch-client">kubectl</div>
+  <svg class="arch-arrow" style="margin-top: 5px;" aria-hidden="true" viewBox="0 0 64 24" fill="none">
+    <path d="M4 12H58" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    <path d="M48 4L58 12L48 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+  <div class="arch-stack">
+    <div class="arch-node arch-primary">API Server</div>
+    <div class="arch-branches">
+      <div class="arch-node">etcd</div>
+      <div class="arch-node">Scheduler</div>
+      <div class="arch-node">Controller Manager</div>
+      <div class="arch-stack arch-worker">
+        <div class="arch-node arch-primary">Worker Nodes</div>
+        <div class="arch-branches">
+          <div class="arch-node">kubelet</div>
+          <div class="arch-node">kube-proxy</div>
+          <div class="arch-node">Pods</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+At a high level, Kubernetes is split into two sides:
+
+- the **control plane**, which stores cluster state and makes decisions
+- the **worker nodes**, which actually run application workloads
+
+`kubectl` is the client tool we use from our machine. When we run a command such as:
+
+```bash
+kubectl apply -f deployment.yaml
 ```
 
-`kubectl` is the client tool we use from our machine. Most operations go through the Kubernetes API.
+`kubectl` sends the request to the **API Server**. The API Server is the front door of the cluster. Almost every component talks through it instead of talking directly to each other.
+
+The API Server stores the desired cluster state in **etcd**. For example:
+
+- this Deployment should have 3 replicas
+- this Service should route to Pods with a certain label
+- this ConfigMap should contain these values
+
+After the desired state is saved, the control plane components react to it.
+
+The **Scheduler** looks for Pods that do not yet have a Node assigned. It chooses a suitable worker node based on available CPU, memory, constraints, and scheduling rules.
+
+The **Controller Manager** runs controllers that keep checking whether the real cluster matches the desired state. If a Deployment says "run 3 Pods" but only 2 are running, a controller creates another Pod.
+
+The **worker nodes** are where containers actually run. Each worker node has:
+
+- `kubelet`, which starts and monitors Pods on that node
+- `kube-proxy`, which helps Service networking reach the right Pods
+- the actual `Pods`, which wrap one or more containers
+
+So the normal flow is:
+
+1. You describe what you want.
+2. The API Server stores that desired state.
+3. The scheduler and controllers decide what needs to happen.
+4. Worker nodes run the Pods.
+5. Kubernetes keeps reconciling the real cluster back toward the desired state.
 
 ---
 
