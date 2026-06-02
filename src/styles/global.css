@@ -112,6 +112,7 @@
   .markdown-content h3,
   .markdown-content h4 {
     @apply text-ink leading-[1.12] tracking-normal;
+    scroll-margin-top: 2rem;
   }
 
   .markdown-content h1 {
@@ -128,6 +129,18 @@
 
   .markdown-content h4 {
     @apply mt-7 mb-2 text-[clamp(1.125rem,2.2vw,1.375rem)];
+  }
+
+  .markdown-content .heading-anchor {
+    @apply ml-2 font-mono text-[0.75em] text-faint no-underline opacity-0 transition-opacity;
+  }
+
+  .markdown-content h1:hover .heading-anchor,
+  .markdown-content h2:hover .heading-anchor,
+  .markdown-content h3:hover .heading-anchor,
+  .markdown-content h4:hover .heading-anchor,
+  .markdown-content .heading-anchor:focus-visible {
+    @apply opacity-100;
   }
 
   .markdown-content p,
@@ -173,6 +186,31 @@
     @apply m-0 text-[1.08rem] text-muted;
   }
 
+  .markdown-content .callout {
+    @apply my-6 rounded-lg border border-line bg-panel px-4 py-3;
+  }
+
+  .markdown-content .callout-title {
+    @apply mb-2 mt-0 font-mono text-[0.78rem] font-bold uppercase text-ink;
+  }
+
+  .markdown-content .callout > :last-child {
+    @apply mb-0;
+  }
+
+  .markdown-content .callout-note {
+    @apply border-l-4 border-l-muted;
+  }
+
+  .markdown-content .callout-tip {
+    @apply border-l-4 border-l-ink;
+  }
+
+  .markdown-content .callout-warning,
+  .markdown-content .callout-caution {
+    @apply border-l-4 border-l-line-strong bg-panel-muted;
+  }
+
   .markdown-content code {
     @apply rounded border border-line bg-code px-1 py-0.5 font-mono text-[0.9em];
   }
@@ -183,6 +221,119 @@
 
   .markdown-content pre code {
     @apply block border-0 bg-transparent p-0 text-[0.88rem] leading-[1.65];
+  }
+
+  .markdown-content .expressive-code {
+    @apply my-6;
+  }
+
+  .markdown-content .expressive-code pre {
+    @apply my-0;
+  }
+
+  .markdown-content img {
+    @apply my-6 h-auto max-w-full rounded-lg border border-line bg-panel;
+  }
+
+  .markdown-content .architecture-diagram {
+    @apply my-7 flex flex-col gap-3 rounded-lg border border-line bg-panel p-4 font-mono text-[0.82rem] text-ink sm:flex-row sm:items-start;
+  }
+
+  .markdown-content .flow-stack,
+  .markdown-content .flow-map {
+    @apply my-6 rounded-lg border border-line bg-panel p-4 font-mono text-[0.88rem] text-ink;
+  }
+
+  .markdown-content .flow-stack {
+    @apply flex flex-col items-start gap-2;
+  }
+
+  .markdown-content .flow-node {
+    @apply w-full rounded-md border border-line bg-paper px-3 py-2 leading-tight;
+  }
+
+  .markdown-content .flow-icon {
+    @apply inline-block size-4 shrink-0 bg-muted;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+  }
+
+  .markdown-content .flow-icon-down {
+    @apply ml-3;
+    mask-image: url("/icons/arrow-down.svg");
+  }
+
+  .markdown-content .flow-icon-right {
+    mask-image: url("/icons/arrow-right.svg");
+  }
+
+  .markdown-content .flow-icon-link {
+    mask-image: url("/icons/link-2.svg");
+  }
+
+  .markdown-content .flow-map {
+    @apply grid gap-2;
+  }
+
+  .markdown-content .flow-row {
+    @apply grid items-center gap-2 rounded-md border border-line bg-paper px-3 py-2 leading-tight;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.5fr);
+  }
+
+  .markdown-content .flow-row-inline {
+    @apply flex flex-wrap items-center gap-2 rounded-md border border-line bg-paper px-3 py-2 leading-tight;
+  }
+
+  .markdown-content .flow-label {
+    @apply font-bold;
+  }
+
+  .markdown-content .flow-list {
+    @apply m-0 list-disc pl-5;
+  }
+
+  .markdown-content .flow-list li {
+    @apply text-[0.88rem] leading-tight;
+    font-family: var(--font-mono);
+  }
+
+  .markdown-content .arch-stack {
+    @apply grid min-w-0 flex-1 gap-3;
+  }
+
+  .markdown-content .arch-branches {
+    @apply grid gap-2 pl-3;
+  }
+
+  .markdown-content .arch-node {
+    @apply rounded-md border border-line bg-paper px-3 py-2 leading-tight;
+  }
+
+  .markdown-content .arch-primary {
+    @apply border-line-strong bg-panel-muted font-bold;
+  }
+
+  .markdown-content .arch-client {
+    @apply bg-ink font-bold text-panel;
+  }
+
+  .markdown-content .arch-arrow {
+    @apply hidden h-6 w-12 shrink-0 self-start text-muted sm:block;
+  }
+
+  @media (min-width: 640px) {
+    .markdown-content .architecture-diagram > .arch-stack > .arch-branches {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .markdown-content .arch-worker {
+      grid-column: 1 / -1;
+    }
+
+    .markdown-content .arch-worker .arch-branches {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
   }
 
   .markdown-content table {

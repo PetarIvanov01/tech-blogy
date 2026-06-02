@@ -1,46 +1,60 @@
-# Astro Starter Kit: Basics
+# Blogy
 
-```sh
-npm create astro@latest -- --template basics
+Astro-based technical blog with Markdown content collections.
+
+## Commands
+
+| Command | Action |
+| --- | --- |
+| `npm install` | Install dependencies |
+| `npm run dev` | Start the local dev server |
+| `npm run build` | Build the production site into `dist/` |
+| `npm run preview` | Preview the production build |
+
+## Writing Posts
+
+Posts live in `src/content/blog` as Markdown files.
+
+Required frontmatter:
+
+```yaml
+---
+title: "Post title"
+description: "Short summary for listings and metadata."
+pubDate: 2026-05-27
+tags: ["backend", "systems"]
+---
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Markdown Features
 
-## 🚀 Project Structure
+### Code Blocks
 
-Inside of your Astro project, you'll see the following folders and files:
+Code blocks are rendered with Expressive Code. Use normal fenced code blocks:
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+````md
+```yaml title="deployment.yaml" {3-5}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-api
+```
+````
+
+### Callouts
+
+Use directive blocks for notes, tips, warnings, and cautions:
+
+```md
+:::note
+This is useful context.
+:::
+
+:::warning title="Production warning"
+Check the failure mode before relying on this pattern.
+:::
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+### Heading Links
 
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Headings automatically receive stable IDs and hoverable anchor links.

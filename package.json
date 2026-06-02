@@ -16,6 +16,12 @@
     "@fontsource/space-mono": "^5.2.9",
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.3.7",
-    "tailwindcss": "^4.3.0"
+    "astro-expressive-code": "^0.42.0",
+    "lucide-static": "^1.17.0",
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-slug": "^6.0.0",
+    "remark-directive": "^4.0.0",
+    "tailwindcss": "^4.3.0",
+    "unist-util-visit": "^5.1.0"
   }
 }
