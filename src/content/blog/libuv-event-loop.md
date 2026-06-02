@@ -5,9 +5,9 @@ pubDate: 2026-06-02
 tags: ["nodejs", "libuv", "event-loop", "backend", "systems"]
 ---
 
-This summary wraps together the questions and answers from our discussion about libuv, Node.js, the event loop, OS notification APIs, sleeping threads, filesystem I/O, streams, backpressure, worker threads, and multiple event loops.
+This article is based on a discussion with GPT while reading through the libuv documentation, asking follow-up questions, and refining the mental model around libuv, Node.js, the event loop, OS notification APIs, sleeping threads, filesystem I/O, streams, backpressure, worker threads, and multiple event loops.
 
-The goal is to preserve the mental model in one place so you can quickly rebuild the whole picture later.
+My goal is to preserve the mental model in one place so I can quickly rebuild the whole picture later.
 
 ---
 
@@ -57,25 +57,27 @@ libuv itself lives in **user space**. It cannot directly receive hardware interr
 
 ## 2. Event loop stages and the poll timeout
 
-The event loop repeatedly goes through phases/stages:
+The event loop repeatedly moves through these stages:
 
-```text
-Run timers
-Run pending callbacks
-Run idle/prepare callbacks
-Poll for I/O
-Run check callbacks
-Run close callbacks
-Repeat
-```
+<div class="stage-list">
+  <ol>
+    <li><strong>Run timers</strong></li>
+    <li><strong>Run pending callbacks</strong></li>
+    <li><strong>Run idle and prepare callbacks</strong></li>
+    <li><strong>Poll for I/O</strong></li>
+    <li><strong>Run check callbacks</strong></li>
+    <li><strong>Run close callbacks</strong></li>
+    <li><strong>Repeat the cycle</strong></li>
+  </ol>
+</div>
 
-The **poll timeout** answers this question:
+Before the loop enters the **poll stage**, libuv must decide **whether it can sleep**, and **for how long**. The **poll timeout** is the value that answers this question:
 
 > How long can the event loop safely sleep while waiting for OS events?
 
-The loop cannot simply sleep forever, because timers might need to fire. But it also should not spin constantly, because that would waste CPU.
+The loop cannot simply **sleep forever**, because **timers might need to fire**. But it also should not **spin constantly**, because that would **waste CPU**.
 
-So before entering the poll phase, libuv calculates a timeout based on active work.
+So before entering the poll phase, libuv calculates a timeout based on **active work**.
 
 ### Example: only a TCP server, no timers
 
@@ -508,7 +510,7 @@ Example:
 ```js
 const stream = fs.createReadStream("huge-file.bin");
 
-stream.on("data", chunk => {
+stream.on("data", (chunk) => {
   console.log(chunk.length);
 });
 ```
@@ -1030,7 +1032,7 @@ For Node event loops:
 
 ## 20. The shortest possible version
 
-If you only remember one thing, remember this:
+If I only remember one thing, it should be this:
 
 > libuv is a user-space abstraction over OS event mechanisms and blocking-operation offloading. The event loop sleeps efficiently by letting the kernel block the thread until an event or timeout occurs. Network I/O usually uses OS readiness/completion notifications. Filesystem I/O usually goes through the worker pool. Node streams do not let workers push data endlessly; Node submits read jobs as needed, tracks offsets, and applies backpressure. A typical Node main thread has one event loop, while Worker Threads can have their own separate event loops.
 
@@ -1038,20 +1040,20 @@ If you only remember one thing, remember this:
 
 ## 21. Vocabulary recap
 
-| Term | Meaning |
-| --- | --- |
-| Event loop | The loop that waits for events and dispatches callbacks |
-| Poll timeout | How long the loop can sleep while waiting for I/O |
-| Blocking syscall | A system call that may put the thread to sleep |
-| Sleeping thread | A thread waiting for an event, not consuming CPU |
-| Runnable thread | A thread ready to run but not necessarily currently running |
-| Running thread | A thread currently executing on a CPU |
-| Context switch | Saving one thread's CPU state and running another thread |
-| epoll/kqueue/IOCP | OS-specific event notification mechanisms |
-| Worker pool | A group of native threads used for blocking/expensive jobs |
-| Backpressure | Flow-control mechanism that prevents unlimited buffering |
-| highWaterMark | Stream buffer threshold that affects when more data is requested |
-| V8 isolate | A separate JavaScript engine instance/context |
-| Worker Thread | A Node.js thread with its own JS context and event loop |
+| Term              | Meaning                                                          |
+| ----------------- | ---------------------------------------------------------------- |
+| Event loop        | The loop that waits for events and dispatches callbacks          |
+| Poll timeout      | How long the loop can sleep while waiting for I/O                |
+| Blocking syscall  | A system call that may put the thread to sleep                   |
+| Sleeping thread   | A thread waiting for an event, not consuming CPU                 |
+| Runnable thread   | A thread ready to run but not necessarily currently running      |
+| Running thread    | A thread currently executing on a CPU                            |
+| Context switch    | Saving one thread's CPU state and running another thread         |
+| epoll/kqueue/IOCP | OS-specific event notification mechanisms                        |
+| Worker pool       | A group of native threads used for blocking/expensive jobs       |
+| Backpressure      | Flow-control mechanism that prevents unlimited buffering         |
+| highWaterMark     | Stream buffer threshold that affects when more data is requested |
+| V8 isolate        | A separate JavaScript engine instance/context                    |
+| Worker Thread     | A Node.js thread with its own JS context and event loop          |
 
 ---

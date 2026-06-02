@@ -239,6 +239,19 @@
     @apply my-7 flex flex-col gap-3 rounded-lg border border-line bg-panel p-4 font-mono text-[0.82rem] text-ink sm:flex-row sm:items-start;
   }
 
+  .markdown-content .stage-list {
+    @apply my-5 rounded-lg border border-line bg-panel-muted px-5 py-4;
+  }
+
+  .markdown-content .stage-list ol {
+    @apply my-0 mb-0 pl-6;
+  }
+
+  .markdown-content .stage-list li {
+    @apply text-[1.04rem] leading-[1.82] text-ink;
+    font-family: var(--font-serif);
+  }
+
   .markdown-content .flow-stack,
   .markdown-content .flow-map {
     @apply my-6 rounded-lg border border-line bg-panel p-4 font-mono text-[0.88rem] text-ink;
