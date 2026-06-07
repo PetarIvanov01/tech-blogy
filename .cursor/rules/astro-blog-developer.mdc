@@ -1,0 +1,69 @@
+---
+description: Use for Astro blog writing, editing, implementation, review, SEO, routing, content collections, RSS, sitemap, and performance work.
+globs:
+  - "**/*.astro"
+  - "**/*.md"
+  - "**/*.mdx"
+  - "src/content/**/*"
+  - "src/pages/**/*"
+  - "src/layouts/**/*"
+  - "astro.config.*"
+alwaysApply: false
+---
+
+# Astro Blog Developer Skill
+
+Use this rule when working on this Astro blog, especially for content writing, post editing, content collections, Markdown/MDX pipelines, routing, layouts, RSS, sitemap, SEO metadata, image optimization, deployment configuration, and performance tuning.
+
+## Baseline Checks
+
+- Identify the Astro version, adapter, package manager, and deployment target before making structural changes.
+- Map the content source: local Markdown, MDX, CMS, or hybrid.
+- Check TypeScript strictness, lint scripts, build scripts, and available tests.
+
+## Content Writing And Modeling
+
+- Prefer Astro content collections with explicit schemas.
+- Keep frontmatter strict and predictable.
+- Require core fields for posts: `title`, `description`, `pubDate`, `slug`, `tags`, and `draft`.
+- Treat `description` as a real search/social summary, not filler.
+- Keep slugs stable and avoid breaking existing URLs.
+- Handle `draft` posts and future dates explicitly.
+- Sort published lists deterministically by publish date.
+
+## Routes And Rendering
+
+- Prefer static-first rendering.
+- Add SSR only when there is a clear product requirement.
+- Use file-based routes and `getStaticPaths` for post pages.
+- Keep tag archives, pagination, and post lists stable and predictable.
+- Centralize slug and URL logic in reusable utilities.
+
+## Layout, SEO, And Sharing
+
+- Centralize metadata in a shared layout or metadata utility.
+- Include canonical URLs, Open Graph tags, Twitter Card tags, and structured data where appropriate.
+- Provide clear fallback behavior when optional image metadata is missing.
+- Generate and validate `sitemap.xml` and RSS/Atom feeds.
+- Ensure robots directives match the deployment environment.
+
+## Performance And UX
+
+- Minimize client hydration; use islands only where interaction adds real value.
+- Use Astro image tooling with an intentional width and format strategy.
+- Check home, post list, tag archive, and post detail pages for Core Web Vitals-sensitive regressions.
+- Keep writing pages readable, fast, and accessible on mobile and desktop.
+
+## Validation
+
+- Run build, type checks, linting, or targeted tests when relevant.
+- Smoke-test paginated lists, tag pages, drafts, future-dated posts, and missing-content paths after route changes.
+- Update or add tests when changing routing, sorting, metadata generation, RSS, sitemap, or content schema behavior.
+
+## Implementation Rules
+
+- Match existing project patterns before introducing new abstractions.
+- Keep edits scoped to the blog feature or content being changed.
+- Preserve backward-compatible URLs during migrations.
+- Do not loosen content schemas to make invalid content pass.
+- Prefer durable Astro APIs over ad hoc string manipulation.
