@@ -1,3 +1,46 @@
 <div class="markdown-content">
   <slot />
 </div>
+
+<dialog class="image-zoom-dialog" data-image-zoom-dialog aria-label="Expanded image preview">
+  <button type="button" class="image-zoom-close" data-image-zoom-close aria-label="Close image preview">
+    Close
+  </button>
+  <img data-image-zoom-target alt="" />
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-image-zoom-dialog]');
+  const zoomedImage = document.querySelector<HTMLImageElement>('[data-image-zoom-target]');
+  const closeButton = document.querySelector<HTMLButtonElement>('[data-image-zoom-close]');
+  const articleImages = document.querySelectorAll<HTMLImageElement>('.markdown-content img');
+
+  if (dialog && zoomedImage && closeButton) {
+    for (const image of articleImages) {
+      image.tabIndex = 0;
+      image.setAttribute('role', 'button');
+      image.setAttribute('aria-label', image.alt ? `Expand image: ${image.alt}` : 'Expand image');
+
+      const openImage = () => {
+        zoomedImage.src = image.currentSrc || image.src;
+        zoomedImage.alt = image.alt;
+        dialog.showModal();
+      };
+
+      image.addEventListener('click', openImage);
+      image.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openImage();
+        }
+      });
+    }
+
+    closeButton.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) {
+        dialog.close();
+      }
+    });
+  }
+</script>

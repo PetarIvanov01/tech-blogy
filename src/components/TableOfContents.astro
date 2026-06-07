@@ -36,6 +36,7 @@ const tocId = `toc-items-${Astro.url.pathname.replaceAll('/', '-').replace(/^-+|
 								<a
 									href={`#${heading.slug}`}
 									class="toc-link"
+									data-toc-link={heading.slug}
 									style={`padding-left: ${heading.depth === 3 ? '0.9rem' : '0'};`}
 								>
 									{heading.text}
@@ -52,6 +53,17 @@ const tocId = `toc-items-${Astro.url.pathname.replaceAll('/', '-').replace(/^-+|
 <script>
 	const toggle = document.querySelector('[data-toc-toggle]');
 	const body = document.querySelector('[data-toc-body]');
+	const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'));
+	const headings = tocLinks
+		.map((link) => {
+			const slug = link.dataset.tocLink;
+			const heading = slug ? document.getElementById(slug) : null;
+
+			return heading ? { slug, heading, link } : null;
+		})
+		.filter((item): item is { slug: string; heading: HTMLElement; link: HTMLAnchorElement } =>
+			Boolean(item),
+		);
 
 	if (toggle instanceof HTMLButtonElement && body instanceof HTMLElement) {
 		toggle.addEventListener('click', () => {
@@ -59,5 +71,59 @@ const tocId = `toc-items-${Astro.url.pathname.replaceAll('/', '-').replace(/^-+|
 			toggle.setAttribute('aria-expanded', String(!expanded));
 			body.hidden = expanded;
 		});
+	}
+
+	if (headings.length > 0) {
+		let activeSlug = '';
+		let frameRequest = 0;
+		const topOffset = 140;
+
+		const setActiveHeading = (slug: string) => {
+			if (!slug || slug === activeSlug) {
+				return;
+			}
+
+			activeSlug = slug;
+
+			for (const { slug: itemSlug, link } of headings) {
+				const isActive = itemSlug === slug;
+				link.classList.toggle('is-active', isActive);
+
+				if (isActive) {
+					link.setAttribute('aria-current', 'true');
+					link.scrollIntoView({ block: 'nearest' });
+				} else {
+					link.removeAttribute('aria-current');
+				}
+			}
+
+			const nextUrl = `${window.location.pathname}${window.location.search}#${slug}`;
+			window.history.replaceState(null, '', nextUrl);
+		};
+
+		const updateActiveHeading = () => {
+			frameRequest = 0;
+			let current = headings[0];
+
+			for (const item of headings) {
+				if (item.heading.getBoundingClientRect().top <= topOffset) {
+					current = item;
+				} else {
+					break;
+				}
+			}
+
+			setActiveHeading(current.slug);
+		};
+
+		const scheduleUpdate = () => {
+			if (frameRequest === 0) {
+				frameRequest = window.requestAnimationFrame(updateActiveHeading);
+			}
+		};
+
+		window.addEventListener('scroll', scheduleUpdate, { passive: true });
+		window.addEventListener('resize', scheduleUpdate);
+		updateActiveHeading();
 	}
 </script>

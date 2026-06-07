@@ -6,6 +6,7 @@ import rehypeSlug from 'rehype-slug';
 import remarkDirective from 'remark-directive';
 import tailwindcss from '@tailwindcss/vite';
 
+import { rehypeExternalLinks } from './src/lib/rehypeExternalLinks.js';
 import { remarkCallouts } from './src/lib/remarkCallouts.js';
 
 // https://astro.build/config
@@ -26,6 +27,7 @@ export default defineConfig({
 		remarkPlugins: [remarkDirective, remarkCallouts],
 		rehypePlugins: [
 			rehypeSlug,
+			rehypeExternalLinks,
 			[
 				rehypeAutolinkHeadings,
 				{

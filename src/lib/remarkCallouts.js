@@ -1,6 +1,6 @@
 import { visit } from 'unist-util-visit';
 
-const calloutTypes = new Set(['note', 'tip', 'warning', 'caution']);
+const calloutTypes = new Set(['intro', 'note', 'tip', 'warning', 'caution']);
 
 export function remarkCallouts() {
   return (tree) => {

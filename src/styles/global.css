@@ -14,6 +14,8 @@
   --color-line: #d7d7d2;
   --color-line-strong: #b7b7b0;
   --color-code: #ededeb;
+  --color-link: #2563eb;
+  --color-link-hover: #1d4ed8;
   --color-selection: #d9d9d4;
   --font-mono:
     "Space Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace;
@@ -103,6 +105,10 @@
     @apply block rounded-sm py-1 text-sm leading-[1.35] text-muted no-underline underline-offset-[0.18em] hover:text-ink hover:underline focus-visible:text-ink focus-visible:underline;
   }
 
+  .toc-link.is-active {
+    @apply bg-panel-muted px-2 font-bold text-ink;
+  }
+
   .markdown-content > :first-child {
     @apply mt-0 border-none;
   }
@@ -153,6 +159,16 @@
     @apply my-4;
   }
 
+  .markdown-content a:not(.heading-anchor) {
+    color: var(--color-link);
+    @apply font-semibold underline decoration-current decoration-1 underline-offset-[0.18em];
+  }
+
+  .markdown-content a:not(.heading-anchor):hover,
+  .markdown-content a:not(.heading-anchor):focus-visible {
+    color: var(--color-link-hover);
+  }
+
   .markdown-content ul,
   .markdown-content ol {
     @apply my-5 mb-6 pl-6;
@@ -198,6 +214,41 @@
     @apply mb-0;
   }
 
+  .markdown-content .article-intro,
+  .markdown-content .callout-intro {
+    position: relative;
+    background:
+      linear-gradient(135deg, rgb(255 255 255 / 0.94), rgb(238 238 235 / 0.72)),
+      var(--color-panel);
+    box-shadow: 0 18px 45px rgb(23 23 23 / 0.07);
+    @apply my-6 overflow-hidden rounded-xl border border-line-strong px-5 py-5;
+  }
+
+  .markdown-content .article-intro::before,
+  .markdown-content .callout-intro::before {
+    content: "";
+    @apply absolute inset-y-0 left-0 w-1 bg-ink;
+  }
+
+  .markdown-content .article-intro-title,
+  .markdown-content .callout-intro .callout-title {
+    @apply mb-3 inline-flex rounded-full border border-line bg-paper px-3 py-1 text-[0.72rem] tracking-wide text-muted;
+  }
+
+  .markdown-content .article-intro p,
+  .markdown-content .callout-intro p {
+    @apply text-[1.02rem] leading-[1.78];
+  }
+
+  .markdown-content .article-intro p:not(.article-intro-title),
+  .markdown-content .callout-intro p:not(.callout-title) {
+    @apply text-muted;
+  }
+
+  .markdown-content .article-intro > :last-child {
+    @apply mb-0;
+  }
+
   .markdown-content .callout-note {
     @apply border-l-4 border-l-muted;
   }
@@ -232,7 +283,23 @@
   }
 
   .markdown-content img {
-    @apply my-6 h-auto max-w-full rounded-lg border border-line bg-panel;
+    @apply my-6 h-auto max-w-full cursor-zoom-in rounded-lg border border-line bg-panel transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink;
+  }
+
+  .image-zoom-dialog {
+    @apply max-h-[98vh] w-[98vw] max-w-none border-0 bg-transparent p-0 backdrop:bg-ink/80;
+  }
+
+  .image-zoom-dialog[open] {
+    @apply grid gap-3;
+  }
+
+  .image-zoom-dialog img {
+    @apply mx-auto max-h-[93vh] w-auto max-w-full rounded-lg border border-line bg-panel object-contain shadow-2xl;
+  }
+
+  .image-zoom-close {
+    @apply justify-self-end rounded-full border border-line bg-panel px-3 py-2 font-mono text-xs font-bold uppercase text-ink shadow-lg hover:bg-panel-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-panel;
   }
 
   .markdown-content .architecture-diagram {
