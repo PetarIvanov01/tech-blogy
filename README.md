@@ -1,4 +1,4 @@
-# Blogy
+# Petar I
 
 Astro-based technical blog with Markdown content collections.
 

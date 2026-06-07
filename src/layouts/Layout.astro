@@ -7,7 +7,7 @@ interface Props {
 }
 
 const {
-	title = 'Blogy',
+	title = 'Petar I',
 	description = 'Personal notes and technical articles.',
 } = Astro.props;
 ---
@@ -29,9 +29,17 @@ const {
 				class="flex flex-col items-start justify-between gap-4 border-b border-line pb-4 sm:flex-row sm:items-center"
 				aria-label="Main navigation"
 			>
-				<a class="font-bold no-underline" href="/">Blogy</a>
+				<a class="font-bold no-underline" href="/">Petar I</a>
 				<div class="flex gap-4 text-[0.95rem] text-muted">
 					<a class="no-underline underline-offset-[0.18em] hover:text-ink hover:underline focus-visible:text-ink focus-visible:underline" href="/">Home</a>
+					<a
+						class="no-underline underline-offset-[0.18em] hover:text-ink hover:underline focus-visible:text-ink focus-visible:underline"
+						href="https://github.com/PetarIvanov01"
+						rel="me noreferrer"
+						target="_blank"
+					>
+						GitHub
+					</a>
 				</div>
 			</nav>
 		</header>
