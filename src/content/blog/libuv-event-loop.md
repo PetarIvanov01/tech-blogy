@@ -5,9 +5,13 @@ pubDate: 2026-06-02
 tags: ["nodejs", "libuv", "event-loop", "backend", "systems"]
 ---
 
-This article is based on a discussion with GPT while reading through the libuv documentation, asking follow-up questions, and refining the mental model around libuv, Node.js, the event loop, OS notification APIs, sleeping threads, filesystem I/O, streams, backpressure, worker threads, and multiple event loops.
+<section class="article-intro" aria-labelledby="article-intro-title">
+  <p id="article-intro-title" class="article-intro-title">Personal Intent</p>
 
-My goal is to preserve the mental model in one place so I can quickly rebuild the whole picture later.
+  <p>This article is based on a discussion with GPT while reading through the libuv documentation, asking follow-up questions, and refining the mental model around libuv, Node.js, the event loop, OS notification APIs, sleeping threads, filesystem I/O, streams, backpressure, worker threads, and multiple event loops.</p>
+
+  <p>My goal is to preserve the mental model in one place so I can quickly rebuild the whole picture later.</p>
+</section>
 
 ---
 
