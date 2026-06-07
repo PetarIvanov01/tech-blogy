@@ -78,8 +78,24 @@ const tocId = `toc-items-${Astro.url.pathname.replaceAll('/', '-').replace(/^-+|
 		let frameRequest = 0;
 		const topOffset = 140;
 
+		const clearActiveHeading = () => {
+			if (!activeSlug) {
+				return;
+			}
+
+			activeSlug = '';
+
+			for (const { link } of headings) {
+				link.classList.remove('is-active');
+				link.removeAttribute('aria-current');
+			}
+
+			const nextUrl = `${window.location.pathname}${window.location.search}`;
+			window.history.replaceState(null, '', nextUrl);
+		};
+
 		const setActiveHeading = (slug: string) => {
-			if (!slug || slug === activeSlug) {
+			if (slug === activeSlug) {
 				return;
 			}
 
@@ -103,7 +119,7 @@ const tocId = `toc-items-${Astro.url.pathname.replaceAll('/', '-').replace(/^-+|
 
 		const updateActiveHeading = () => {
 			frameRequest = 0;
-			let current = headings[0];
+			let current: (typeof headings)[number] | null = null;
 
 			for (const item of headings) {
 				if (item.heading.getBoundingClientRect().top <= topOffset) {
@@ -113,7 +129,11 @@ const tocId = `toc-items-${Astro.url.pathname.replaceAll('/', '-').replace(/^-+|
 				}
 			}
 
-			setActiveHeading(current.slug);
+			if (current) {
+				setActiveHeading(current.slug);
+			} else {
+				clearActiveHeading();
+			}
 		};
 
 		const scheduleUpdate = () => {
