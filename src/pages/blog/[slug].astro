@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import MarkdownContent from '../../components/MarkdownContent.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import Layout from '../../layouts/Layout.astro';
+import { getSeriesByKey, getSeriesHref } from '../../lib/series';
 
 export async function getStaticPaths() {
 	const posts = (await getCollection('blog')).filter((post) => !post.data.draft);
@@ -16,23 +17,37 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
 const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
-const formattedDate = new Intl.DateTimeFormat('en', {
-	month: 'long',
-	day: 'numeric',
-	year: 'numeric',
-}).format(post.data.pubDate);
+const series = getSeriesByKey(post.data.series);
+const formattedDate = !series
+	? new Intl.DateTimeFormat('en', {
+			month: 'long',
+			day: 'numeric',
+			year: 'numeric',
+		}).format(post.data.pubDate)
+	: undefined;
+const articleLabel = series && post.data.seriesOrder
+	? `${series.title} Chapter ${post.data.seriesOrder}`
+	: 'Article';
 ---
 
 <Layout title={`${post.data.title} | Petar I`} description={post.data.description}>
 	<main class="page-shell">
 		<header class="grid gap-4 border-b border-line py-[clamp(2rem,7vw,4.5rem)] pb-8">
-			<p class="eyebrow">Article</p>
+			<p class="eyebrow">{articleLabel}</p>
 			<h1 class="article-title">{post.data.title}</h1>
 			<p class="hero-copy">{post.data.description}</p>
 			<div class="flex flex-wrap gap-3 font-mono text-[0.82rem] text-muted uppercase">
-				<time datetime={post.data.pubDate.toISOString()}>{formattedDate}</time>
+				{formattedDate && <time datetime={post.data.pubDate.toISOString()}>{formattedDate}</time>}
 				{post.data.tags.map((tag) => <span>{tag}</span>)}
 			</div>
+			{series && (
+				<a
+					class="font-mono text-[0.82rem] text-muted no-underline uppercase underline-offset-[0.18em] hover:text-ink hover:underline focus-visible:text-ink focus-visible:underline"
+					href={getSeriesHref(series)}
+				>
+					View all chapters in {series.title}
+				</a>
+			)}
 		</header>
 
 		<div class="article-layout">

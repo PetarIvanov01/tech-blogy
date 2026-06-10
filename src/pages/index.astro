@@ -2,10 +2,12 @@
 import { getCollection } from 'astro:content';
 import BlogPostCard from '../components/BlogPostCard.astro';
 import Layout from '../layouts/Layout.astro';
+import { getHomepageItems, getSeriesHref } from '../lib/series';
 
 const posts = (await getCollection('blog'))
 	.filter((post) => !post.data.draft)
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const homepageItems = getHomepageItems(posts);
 ---
 
 <Layout
@@ -14,24 +16,36 @@ const posts = (await getCollection('blog'))
 >
 	<main class="page-shell">
 		<section class="grid gap-4 py-[clamp(2rem,8vw,5rem)] pb-[clamp(1.8rem,5vw,3.4rem)]" aria-labelledby="page-title">
-			<p class="eyebrow">Personal technical notes</p>
 			<h1 id="page-title" class="hero-title">Petar I</h1>
 			<p class="hero-copy">
-				Long-form articles written in Markdown, focused on backend systems,
-				databases, architecture, and the tradeoffs behind production software.
+				These are my personal technical notes: some are distilled from long AI-assisted conversations and shaped into articles, while others are written entirely by me.
 			</p>
 		</section>
 
 		<section id="articles" aria-label="Articles">
-			{posts.map((post) => (
-				<BlogPostCard
-					href={`/blog/${post.id}/`}
-					title={post.data.title}
-					description={post.data.description}
-					pubDate={post.data.pubDate}
-					tags={post.data.tags}
-				/>
-			))}
+			{homepageItems.map((item) => {
+				if (item.type === 'series') {
+					return (
+						<BlogPostCard
+							href={getSeriesHref(item.series)}
+							title={item.series.title}
+							description={item.series.description}
+							displayDate={item.series.displayDate}
+							tags={item.series.tags}
+						/>
+					);
+				}
+
+				return (
+					<BlogPostCard
+						href={`/blog/${item.post.id}/`}
+						title={item.post.data.title}
+						description={item.post.data.description}
+						pubDate={item.post.data.pubDate}
+						tags={item.post.data.tags}
+					/>
+				);
+			})}
 		</section>
 	</main>
 </Layout>

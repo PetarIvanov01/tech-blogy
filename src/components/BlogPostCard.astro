@@ -3,21 +3,28 @@ interface Props {
   href: string;
   title: string;
   description: string;
-  pubDate: Date;
+  pubDate?: Date;
+  displayDate?: string;
   tags?: string[];
 }
 
-const { href, title, description, pubDate, tags = [] } = Astro.props;
-const formattedDate = new Intl.DateTimeFormat('en', {
-  month: 'short',
-  day: 'numeric',
-  year: 'numeric',
-}).format(pubDate);
+const { href, title, description, pubDate, displayDate, tags = [] } = Astro.props;
+const formattedDate = pubDate
+  ? new Intl.DateTimeFormat('en', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    }).format(pubDate)
+  : displayDate;
 ---
 
 <article class="border-t border-line">
   <a href={href} class="group grid gap-2.5 py-6 text-inherit no-underline">
-    <time class="font-mono text-xs text-muted uppercase" datetime={pubDate.toISOString()}>{formattedDate}</time>
+    {
+      formattedDate && (
+        <time class="font-mono text-xs text-muted uppercase" datetime={pubDate?.toISOString()}>{formattedDate}</time>
+      )
+    }
     <h2 class="m-0 text-[clamp(1.35rem,3vw,2rem)] leading-[1.12] text-ink group-hover:underline group-focus-visible:underline underline-offset-[0.18em]">{title}</h2>
     <p class="m-0 w-full max-w-none leading-[1.65] text-muted">{description}</p>
     {
