@@ -36,6 +36,15 @@ export const seriesMetadata = [
 		displayDate: 'March 2026',
 		tags: ['ddia', 'databases', 'distributed-systems'],
 	},
+	{
+		key: 'System Design Interview',
+		slug: 'system-design',
+		title: 'System Design Interview',
+		description:
+			'Notes from system design chapters and practice designs, covering scaling, estimation, rate limiting, storage, feeds, chat, video, file sync, and trading systems.',
+		displayDate: 'March 2026',
+		tags: ['system-design', 'architecture', 'distributed-systems'],
+	},
 ] satisfies SeriesMetadata[];
 
 export function getSeriesHref(series: SeriesMetadata) {
