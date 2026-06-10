@@ -19,6 +19,7 @@
     "@fontsource/space-mono": "^5.2.9",
     "@notionhq/client": "^5.22.0",
     "@tailwindcss/vite": "^4.3.0",
+    "@vercel/analytics": "^2.0.1",
     "astro": "^6.3.7",
     "astro-expressive-code": "^0.42.0",
     "lucide-static": "^1.17.0",
