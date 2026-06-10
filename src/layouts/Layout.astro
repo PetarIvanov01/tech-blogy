@@ -1,5 +1,6 @@
 ---
 import Analytics from '@vercel/analytics/astro';
+import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -52,6 +53,7 @@ const {
 			</nav>
 		</header>
 		<slot />
+		<Footer />
 		<button type="button" class="scroll-top-button" data-scroll-top aria-label="Scroll to top">
 			<span class="scroll-top-icon" aria-hidden="true"></span>
 		</button>
