@@ -5,10 +5,13 @@ interface Props {
   description: string;
   pubDate?: Date;
   displayDate?: string;
+  label?: string;
+  variant?: 'post' | 'series';
   tags?: string[];
 }
 
-const { href, title, description, pubDate, displayDate, tags = [] } = Astro.props;
+const { href, title, description, pubDate, displayDate, label, variant = 'post', tags = [] } = Astro.props;
+const isSeries = variant === 'series';
 const formattedDate = pubDate
   ? new Intl.DateTimeFormat('en', {
       month: 'short',
@@ -18,13 +21,31 @@ const formattedDate = pubDate
   : displayDate;
 ---
 
-<article class="border-t border-line">
-  <a href={href} class="group grid gap-2.5 py-6 text-inherit no-underline">
-    {
-      formattedDate && (
-        <time class="font-mono text-xs text-muted uppercase" datetime={pubDate?.toISOString()}>{formattedDate}</time>
-      )
-    }
+<article
+  class={isSeries ? 'border-t border-line py-3 first:border-t-0' : 'border-t border-line'}
+  data-card-type={isSeries ? 'folder' : 'article'}
+>
+  <a
+    href={href}
+    class:list={[
+      'group grid gap-2.5 text-inherit no-underline',
+      isSeries
+        ? 'rounded-xl border border-line-strong bg-paper px-4 py-5 shadow-sm transition-colors hover:bg-panel-muted focus-visible:bg-panel-muted sm:px-5'
+        : 'py-6',
+    ]}
+  >
+    {(label || formattedDate) && (
+      <div class="flex flex-wrap items-center gap-2 font-mono text-xs text-muted uppercase">
+        {label && <span class={isSeries ? 'rounded-full border border-line bg-panel px-2 py-1' : ''}>{label}</span>}
+        {
+          pubDate && formattedDate ? (
+            <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+          ) : (
+            formattedDate && <span>{formattedDate}</span>
+          )
+        }
+      </div>
+    )}
     <h2 class="m-0 text-[clamp(1.35rem,3vw,2rem)] leading-[1.12] text-ink group-hover:underline group-focus-visible:underline underline-offset-[0.18em]">{title}</h2>
     <p class="m-0 w-full max-w-none leading-[1.65] text-muted">{description}</p>
     {

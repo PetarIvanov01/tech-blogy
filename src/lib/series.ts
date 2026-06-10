@@ -121,5 +121,18 @@ export function getHomepageItems(posts: BlogPost[]) {
 		});
 	}
 
-	return items.sort((a, b) => b.pubDate.valueOf() - a.pubDate.valueOf());
+	return items.sort((a, b) => {
+		if (a.type !== b.type) {
+			return a.type === 'post' ? -1 : 1;
+		}
+
+		if (a.type === 'series' && b.type === 'series') {
+			return (
+				seriesMetadata.findIndex((series) => series.key === a.series.key) -
+				seriesMetadata.findIndex((series) => series.key === b.series.key)
+			);
+		}
+
+		return b.pubDate.valueOf() - a.pubDate.valueOf();
+	});
 }

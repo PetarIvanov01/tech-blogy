@@ -33,6 +33,7 @@
 
   html {
     @apply bg-panel text-ink font-mono leading-normal;
+    scrollbar-gutter: stable;
   }
 
   body {

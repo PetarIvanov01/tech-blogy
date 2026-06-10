@@ -23,6 +23,33 @@ const homepageItems = getHomepageItems(posts);
 		</section>
 
 		<section id="articles" aria-label="Articles">
+			<div class="mb-4 flex flex-wrap gap-2" aria-label="Content filters">
+				<button
+					class="content-filter rounded-full border border-ink bg-ink px-3 py-1.5 font-mono text-xs text-panel uppercase"
+					type="button"
+					data-filter="all"
+					aria-pressed="true"
+				>
+					All
+				</button>
+				<button
+					class="content-filter rounded-full border border-line px-3 py-1.5 font-mono text-xs text-muted uppercase hover:text-ink focus-visible:text-ink"
+					type="button"
+					data-filter="article"
+					aria-pressed="false"
+				>
+					Articles
+				</button>
+				<button
+					class="content-filter rounded-full border border-line px-3 py-1.5 font-mono text-xs text-muted uppercase hover:text-ink focus-visible:text-ink"
+					type="button"
+					data-filter="folder"
+					aria-pressed="false"
+				>
+					Folders
+				</button>
+			</div>
+
 			{homepageItems.map((item) => {
 				if (item.type === 'series') {
 					return (
@@ -31,6 +58,8 @@ const homepageItems = getHomepageItems(posts);
 							title={item.series.title}
 							description={item.series.description}
 							displayDate={item.series.displayDate}
+							label="Folder"
+							variant="series"
 							tags={item.series.tags}
 						/>
 					);
@@ -48,4 +77,29 @@ const homepageItems = getHomepageItems(posts);
 			})}
 		</section>
 	</main>
+
+	<script>
+		const filterButtons = document.querySelectorAll<HTMLButtonElement>('.content-filter');
+		const cards = document.querySelectorAll<HTMLElement>('[data-card-type]');
+
+		for (const button of filterButtons) {
+			button.addEventListener('click', () => {
+				const filter = button.dataset.filter ?? 'all';
+
+				for (const card of cards) {
+					card.hidden = filter !== 'all' && card.dataset.cardType !== filter;
+				}
+
+				for (const filterButton of filterButtons) {
+					const isActive = filterButton === button;
+					filterButton.setAttribute('aria-pressed', String(isActive));
+					filterButton.classList.toggle('bg-ink', isActive);
+					filterButton.classList.toggle('border-ink', isActive);
+					filterButton.classList.toggle('text-panel', isActive);
+					filterButton.classList.toggle('border-line', !isActive);
+					filterButton.classList.toggle('text-muted', !isActive);
+				}
+			});
+		}
+	</script>
 </Layout>
