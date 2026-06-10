@@ -22,3 +22,8 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+scripts
+src/lib/notion
+README.notion.local.md
+notion-export

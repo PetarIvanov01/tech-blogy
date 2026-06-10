@@ -5,7 +5,7 @@ import TableOfContents from '../../components/TableOfContents.astro';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
+	const posts = (await getCollection('blog')).filter((post) => !post.data.draft);
 
 	return posts.map((post) => ({
 		params: { slug: post.id },

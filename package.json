@@ -9,11 +9,15 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "notion:import": "node scripts/import-notion-pages.mjs",
+    "notion:pages": "node scripts/fetch-notion-pages.mjs",
+    "notion:chapters": "node scripts/export-notion-chapters.mjs"
   },
   "dependencies": {
     "@fontsource/source-serif-4": "^5.2.9",
     "@fontsource/space-mono": "^5.2.9",
+    "@notionhq/client": "^5.22.0",
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.3.7",
     "astro-expressive-code": "^0.42.0",
