@@ -119,7 +119,7 @@ Book reference (page 11):
 
 Simply handling 12,000 writes per second (the peak rate for posting tweets) would be fairly easy. However, Twitter’s scaling challenge is not primarily due to tweet volume, but due to fan-out - each user follows many people, and each user is followed by many people.
 
-In the book, the authors give an example of how Twitter handles this “fan-out” functionality by showing the two options where they are using the hybrid one. I have described parts of these problems and options in this example inside my resume for “[DESIGN A NEWS FEED SYSTEM](/2e94038a7d018078807bdae18751a939)”. I will use it as a reference.
+In the book, the authors give an example of how Twitter handles this “fan-out” functionality by showing the two options where they are using the hybrid one. I have described parts of these problems and options in [Design A News Feed System](/blog/system-design-chapter-11-design-a-news-feed-system/). I will use it as a reference.
 
 **Performance**
 

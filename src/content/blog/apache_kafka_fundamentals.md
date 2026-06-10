@@ -1,6 +1,6 @@
 ---
 title: "Apache Kafka Fundamentals: Producers, Brokers, Topics, Partitions, and Consumers"
-description: "A beginner-friendly guide to Apache Kafka's core concepts, including producers, brokers, topics, partitions, messages, consumers, replication, partitioning, ZooKeeper, and KRaft."
+description: "Summary of conversation with GPT about Apache Kafka's core concepts, including producers, brokers, topics, partitions, messages, consumers, replication, partitioning, ZooKeeper, and KRaft."
 pubDate: 2026-06-10
 slug: "apache_kafka_fundamentals"
 tags: ["apache-kafka", "distributed-systems", "backend", "event-streaming"]
