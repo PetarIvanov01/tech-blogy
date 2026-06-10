@@ -1,138 +1,147 @@
-import type { CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from "astro:content";
 
 export interface SeriesMetadata {
-	key: string;
-	slug: string;
-	title: string;
-	description: string;
-	displayDate?: string;
-	tags?: string[];
+  key: string;
+  slug: string;
+  title: string;
+  description: string;
+  displayDate?: string;
+  tags?: string[];
 }
 
-export type BlogPost = CollectionEntry<'blog'>;
+export type BlogPost = CollectionEntry<"blog">;
 
 export interface HomepageSeriesItem {
-	type: 'series';
-	series: SeriesMetadata;
-	posts: BlogPost[];
-	pubDate: Date;
+  type: "series";
+  series: SeriesMetadata;
+  posts: BlogPost[];
+  pubDate: Date;
 }
 
 export interface HomepagePostItem {
-	type: 'post';
-	post: BlogPost;
-	pubDate: Date;
+  type: "post";
+  post: BlogPost;
+  pubDate: Date;
 }
 
 export type HomepageItem = HomepageSeriesItem | HomepagePostItem;
 
 export const seriesMetadata = [
-	{
-		key: 'DDIA',
-		slug: 'ddia',
-		title: 'Designing Data-Intensive Applications',
-		description:
-			'Chapter notes on DDIA, covering reliable systems, data models, storage, replication, partitioning, transactions, and consensus.',
-		displayDate: 'March 2026',
-		tags: ['ddia', 'databases', 'distributed-systems'],
-	},
-	{
-		key: 'System Design Interview',
-		slug: 'system-design',
-		title: 'System Design Interview',
-		description:
-			'Notes from system design chapters and practice designs, covering scaling, estimation, rate limiting, storage, feeds, chat, video, file sync, and trading systems.',
-		displayDate: 'March 2026',
-		tags: ['system-design', 'architecture', 'distributed-systems'],
-	},
+  {
+    key: "DDIA",
+    slug: "ddia",
+    title: "Designing Data-Intensive Applications",
+    description:
+      "Chapter notes on DDIA, covering reliable systems, data models, storage, replication, partitioning, transactions, and consensus.",
+    displayDate: "March 2026",
+    tags: ["ddia", "databases", "distributed-systems"]
+  },
+  {
+    key: "System Design Interview",
+    slug: "system-design",
+    title: "System Design Interview",
+    description:
+      "Notes from system design chapters and practice designs, covering scaling, estimation, rate limiting, storage, feeds, chat, video, file sync, and trading systems.",
+    displayDate: "March 2026",
+    tags: ["system-design", "architecture", "distributed-systems"]
+  },
+  {
+    key: "Interview Questions",
+    slug: "interview-questions",
+    title: "Interview Questions",
+    description:
+      "My answers for practical interview questions about specific technologies like React, JavaScript, and Node.js.",
+    displayDate: "April 2026",
+    tags: ["interview-questions", "react", "javascript", "nodejs"]
+  }
 ] satisfies SeriesMetadata[];
 
 export function getSeriesHref(series: SeriesMetadata) {
-	return `/series/${series.slug}/`;
+  return `/series/${series.slug}/`;
 }
 
 export function getSeriesByKey(seriesKey?: string) {
-	if (!seriesKey) {
-		return undefined;
-	}
+  if (!seriesKey) {
+    return undefined;
+  }
 
-	return seriesMetadata.find((series) => series.key === seriesKey);
+  return seriesMetadata.find((series) => series.key === seriesKey);
 }
 
 export function getSeriesBySlug(seriesSlug: string) {
-	return seriesMetadata.find((series) => series.slug === seriesSlug);
+  return seriesMetadata.find((series) => series.slug === seriesSlug);
 }
 
 export function sortPostsBySeriesOrder(posts: BlogPost[]) {
-	return [...posts].sort((a, b) => {
-		const orderA = a.data.seriesOrder ?? Number.MAX_SAFE_INTEGER;
-		const orderB = b.data.seriesOrder ?? Number.MAX_SAFE_INTEGER;
+  return [...posts].sort((a, b) => {
+    const orderA = a.data.seriesOrder ?? Number.MAX_SAFE_INTEGER;
+    const orderB = b.data.seriesOrder ?? Number.MAX_SAFE_INTEGER;
 
-		if (orderA !== orderB) {
-			return orderA - orderB;
-		}
+    if (orderA !== orderB) {
+      return orderA - orderB;
+    }
 
-		return a.data.pubDate.valueOf() - b.data.pubDate.valueOf();
-	});
+    return a.data.pubDate.valueOf() - b.data.pubDate.valueOf();
+  });
 }
 
 export function getLatestPostDate(posts: BlogPost[]) {
-	return posts.reduce(
-		(latest, post) => (post.data.pubDate > latest ? post.data.pubDate : latest),
-		posts[0]?.data.pubDate ?? new Date(0),
-	);
+  return posts.reduce(
+    (latest, post) => (post.data.pubDate > latest ? post.data.pubDate : latest),
+    posts[0]?.data.pubDate ?? new Date(0)
+  );
 }
 
 export function getHomepageItems(posts: BlogPost[]) {
-	const seriesPosts = new Map<string, BlogPost[]>();
-	const standalonePosts: BlogPost[] = [];
+  const seriesPosts = new Map<string, BlogPost[]>();
+  const standalonePosts: BlogPost[] = [];
 
-	for (const post of posts) {
-		const series = getSeriesByKey(post.data.series);
+  for (const post of posts) {
+    const series = getSeriesByKey(post.data.series);
 
-		if (!series) {
-			standalonePosts.push(post);
-			continue;
-		}
+    if (!series) {
+      standalonePosts.push(post);
+      continue;
+    }
 
-		const groupedPosts = seriesPosts.get(series.key) ?? [];
-		groupedPosts.push(post);
-		seriesPosts.set(series.key, groupedPosts);
-	}
+    const groupedPosts = seriesPosts.get(series.key) ?? [];
+    groupedPosts.push(post);
+    seriesPosts.set(series.key, groupedPosts);
+  }
 
-	const items: HomepageItem[] = standalonePosts.map((post) => ({
-		type: 'post',
-		post,
-		pubDate: post.data.pubDate,
-	}));
+  const items: HomepageItem[] = standalonePosts.map((post) => ({
+    type: "post",
+    post,
+    pubDate: post.data.pubDate
+  }));
 
-	for (const [seriesKey, postsInSeries] of seriesPosts) {
-		const series = getSeriesByKey(seriesKey);
+  for (const [seriesKey, postsInSeries] of seriesPosts) {
+    const series = getSeriesByKey(seriesKey);
 
-		if (!series) {
-			continue;
-		}
+    if (!series) {
+      continue;
+    }
 
-		items.push({
-			type: 'series',
-			series,
-			posts: sortPostsBySeriesOrder(postsInSeries),
-			pubDate: getLatestPostDate(postsInSeries),
-		});
-	}
+    items.push({
+      type: "series",
+      series,
+      posts: sortPostsBySeriesOrder(postsInSeries),
+      pubDate: getLatestPostDate(postsInSeries)
+    });
+  }
 
-	return items.sort((a, b) => {
-		if (a.type !== b.type) {
-			return a.type === 'post' ? -1 : 1;
-		}
+  return items.sort((a, b) => {
+    if (a.type !== b.type) {
+      return a.type === "post" ? -1 : 1;
+    }
 
-		if (a.type === 'series' && b.type === 'series') {
-			return (
-				seriesMetadata.findIndex((series) => series.key === a.series.key) -
-				seriesMetadata.findIndex((series) => series.key === b.series.key)
-			);
-		}
+    if (a.type === "series" && b.type === "series") {
+      return (
+        seriesMetadata.findIndex((series) => series.key === a.series.key) -
+        seriesMetadata.findIndex((series) => series.key === b.series.key)
+      );
+    }
 
-		return b.pubDate.valueOf() - a.pubDate.valueOf();
-	});
+    return b.pubDate.valueOf() - a.pubDate.valueOf();
+  });
 }

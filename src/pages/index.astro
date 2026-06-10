@@ -101,6 +101,8 @@ const homepageItems = getHomepageItems(posts);
 					filterButton.classList.toggle('text-panel', isActive);
 					filterButton.classList.toggle('border-line', !isActive);
 					filterButton.classList.toggle('text-muted', !isActive);
+					filterButton.classList.toggle('hover:text-ink', !isActive);
+					filterButton.classList.toggle('focus-visible:text-ink', !isActive);
 				}
 			});
 		}
