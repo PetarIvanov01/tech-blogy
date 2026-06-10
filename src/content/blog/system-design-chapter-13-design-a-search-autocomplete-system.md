@@ -16,7 +16,7 @@ SYSTEM
 > Source: Summarizing chapters
 > Notion page: https://app.notion.com/p/CHAPTER-13-DESIGN-A-SEARCH-AUTOCOMPLETE-SYSTEM-2ee4038a7d0180fe87aad9947f1d3c61
 
-### Step 1: Understand the problem and establish a scope
+## Step 1: Understand the problem and establish a scope
 
 Questions:
 
@@ -37,7 +37,7 @@ Questions:
 
 Auto-suggestions should be fast enough, as Facebook suggests in their articles, a response should be shown within 100 ms. The results should be relevant to the search query and sorted by some criteria, such as frequency, popularity, or other ranking systems.
 
-**Back-of-the-envelope estimation**
+### Back-of-the-envelope estimation
 
 - 10 Million DAU.
 - On average, a user makes 10 requests per day.
@@ -49,11 +49,11 @@ Auto-suggestions should be fast enough, as Facebook suggests in their articles, 
 
 ---
 
-### Step 2: High-level design
+## Step 2: High-level design
 
 On a high-level we have two components:
 
-**Data Gathering Service (Write Path)**
+### Data Gathering Service (Write Path)
 
 We can go with real-time data processing, and what we will have is a table with `query:` `frequency` pairs, and whenever a user types a query that is not within our data set, we will create it and assign a frequency of 1.
 
@@ -61,7 +61,7 @@ However, real-time processing is not a good solution at scale. In an autocomplet
 
 ---
 
-**Query Service (Read Path)**
+### Query Service (Read Path)
 
 On the storage side, we have the following data model:
 
@@ -84,7 +84,7 @@ The main bottleneck is the SQL query itself. Even with a composite index on `(qu
 
 ---
 
-### Step 3: Design deep dive
+## Step 3: Design deep dive
 
 The current way of searching is not efficient for large-scale. A much better way is to use a `prefix tree` or `trie`.
 
@@ -120,7 +120,7 @@ Usually, users’ queries are small in terms of length; we can add a max-length 
 
 ---
 
-**Data gathering service re-design**
+### Data gathering service re-design
 
 In the high-level design, we choose real-time processing of the data, on each write request, we have to update the frequency or create a new record. Even if we go with the trie data structure, we will have a lot of writes that are not necessarily needed to happen in real-time.
 
@@ -134,7 +134,7 @@ For storage, we can choose a key-value store or document storage:
 
 ---
 
-**Query service**
+### Query service
 
 In the high-level design, we fetch the top 5 suggestions from the DB with an SQL query, as I explained, it’s not optimal for large scale. Also, we moved to Trie for datastructure. Relational DB can work, but it’s not a good fit.
 
@@ -149,31 +149,31 @@ In the high-level design, we fetch the top 5 suggestions from the DB with an SQL
 
 ---
 
-**Trie Operations**
+### Trie Operations
 
-1. **Create**
+#### Create
 
 The Trie is created by background workers using aggregated data derived from analytics logs.
 
-1. **Update**
+#### Update
 
 Option 1: Update the trie on a certain interval by replacing the old one with entirly new.
 
 Option 2: Update individual nodes in the Trie. This approach is expensive at a large scale because updating a single query may require recomputing top suggestions for multiple ancestor nodes along the prefix path.
 
-1. **Delete**
+#### Delete
 
 Instead of deleting nodes from the Trie later, unwanted queries (such as spam, offensive content, or very low-frequency queries) should be filtered out during data aggregation, before the Trie is built.
 
 ---
 
-**Scale the storage**
+### Scale the storage
 
 Since we are storing only lowercase English letters, we can shard the Trie by prefix. For example, one shard can store prefixes from `a to m,` and another from `n to z`.
 
 ---
 
-### Step 4: Wrap up
+## Step 4: Wrap up
 
 In this chapter, we redesigned the autocomplete system to scale for large traffic by separating the read and write paths.
 

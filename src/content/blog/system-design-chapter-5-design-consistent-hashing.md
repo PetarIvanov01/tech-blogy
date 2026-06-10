@@ -11,15 +11,17 @@ seriesOrder: 5
 > System Design Interview series: Chapter 5 - Design Consistent Hashing
 > Summarizing chapters
 
+## Overview
+
 In a distributed environment, when having multiple horizontally scaled services, consistent hashing is used to map the incoming requests to a certain server using different hash functions and other techniques.
 
-### The problem with rehashing.
+## The problem with rehashing
 
 One simple design for hashing would be to use the following formula `serverIndex = hashFn(key) % N` where `N` is the number of available servers. This way, we can ensure that requests will be distributed evenly across all servers. This design works well and is simple if the number of servers won’t change. However, in the real world, services could be added or removed due to scaling down or up, which means a new `serverIndex` should be recomputed because the module operation would give a different value for the same hash key, which is bad because users would be routed to different services.
 
 The main issue with this approach is that when N changes, most keys are remapped to different servers. This is problematic for stateful systems such as caches or session stores, where remapping keys causes cache misses and increases load on backend systems.
 
-### Consistent hashing
+## Consistent hashing
 
 Consistent hashing ensures that when the number of servers changes, only a fraction of keys (average k / n, where k is the number of keys and n is the number of servers) need to be remapped.
 
@@ -29,7 +31,7 @@ The hash function produces values within a fixed numeric range. This range defin
 
 Consistent hashing is useful for stateful architectures, such as distributed caches or databases, where data or sessions are tied to specific servers. In stateless systems, where any instance can handle any request, some load-balancing strategies are more suitable.
 
-### Hash servers
+## Hash servers
 
 By hashing a server’s IP address or name, we can map the server to a position on the hash ring.
 

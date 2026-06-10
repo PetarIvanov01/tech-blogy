@@ -11,7 +11,7 @@ seriesOrder: 12
 > System Design Interview series: Chapter 12 - Design A Chat System
 > Summarizing chapters
 
-### Step 1: Understand the problem and define a scope
+## Step 1: Understand the problem and define a scope
 
 There are different types of chat applications, such as Discord, Facebook Messenger, WhatsApp, etc. Some of them are better for one-to-one chat, and some for group chats with a lot of people in the group. We have to ask some clarifying questions to remove ambiguities.
 
@@ -24,7 +24,7 @@ There are different types of chat applications, such as Discord, Facebook Messen
 4. Is it text only, or users can send media or attachments?
    1. It’s text-only messages.
 
-### Step 2: Propose a high-level design and dive in
+## Step 2: Propose a high-level design and dive in
 
 The basic functionalities that the chat service should support are:
 
@@ -52,13 +52,15 @@ There are a few downsides to this approach:
 
 ---
 
+### WebSockets
+
 A much better approach is to use WebSockets. This is an upgrade over normal HTTP communication. The connection starts with an HTTP request in which the client wants to establish a WebSocket connection with the server. If the server agrees, both sides can then use a single bidirectional connection to send messages to each other.
 
 Since WebSocket connections use ports 80 or 443, they are typically allowed through firewalls and can also be encrypted using SSL/TLS.
 
 ---
 
-### **High-level design**
+## High-level design
 
 We don’t need to move all services to WebSockets. Services such as **User Profile**, **Authentication**, and **Service Discovery** can continue to use normal HTTP with a request/response model. However, the **Chat Service** and the **Presence Service** should use **WebSockets**.
 
@@ -80,13 +82,15 @@ For storage as was proposed in the book, a key-value store is good choice to sto
 
 ---
 
-**Storage**
+### Storage
 
 For storage we have to consider what kind of information is going to be stored from our application. We will have user profile information such as, username, email, etc. For this case, relational database is going to suit us well. However, for the chat history relational database won’t fit our needs.
 
 Chat services experience a lot of writes thus if we use SQL database, on each write indexes that are created for fast reads has to be re-ordered which can lead to performance issues. Another pitfall is when having pagination because SQL uses OFFSET pagination not cursor based, and if we want to access items OFFSET 100 500 the engine will still go through the records. In NoSQL we can use cursor based pagination and apply binary search to get results that are within provided timestamp. SQL adds a lot of different metadata, indexes and other information for each row and thus we are going to have a lot of writes.
 
 ---
+
+### Chat history storage tradeoffs
 
 Chat services experience a very high volume of writes. When using an SQL database, every write requires updating and maintaining indexes that are created for fast reads. These indexes often need to be rebalanced or reordered, which can lead to performance issues.
 
@@ -96,7 +100,7 @@ In NoSQL databases, cursor-based pagination is commonly used. This allows querie
 
 Also, SQL databases add significant overhead for each row in the form of metadata, indexes, and transactional information that can bloat the database unnecessarily since we don’t need this information for our chat history records.
 
-### Step 3: Deep Dive
+## Step 3: Deep Dive
 
 We won’t have much time to go over all of the components, so let’s choose the most important and intriguing ones:
 
@@ -106,7 +110,7 @@ We won’t have much time to go over all of the components, so let’s choose th
 
 ---
 
-**Messaging Flow**
+### Messaging Flow
 
 ![Chapter 12 Design A Chat System figure 2](/images/system-design/chapter-12-design-a-chat-system/2.png)
 
@@ -119,19 +123,19 @@ We won’t have much time to go over all of the components, so let’s choose th
 
 ---
 
-**Presence Service**
+### Presence Service
 
 This is a very common feature in chat applications. There different ways to update the presence status:
 
-1. **On Login**
+#### On Login
 
 After the users has logged to the chat application and has established a WS connection with the service, the information is being stored in the KV store. We store `last_logged_at` timestamp and the user status.
 
-1. **On Logout**
+#### On Logout
 
 After the user logged outs (either lost a connection or purposefully logout from the chat) the chat service, the indicator is update to offline.
 
-1. **Handle unstable connections**
+#### Handle unstable connections
 
 Network issues can cause temporary disconnections. For example, a user might lose connection while going through a tunnel or metro, but reconnect shortly afterward. In this case, the user should not immediately be marked as offline.
 
@@ -145,7 +149,7 @@ If the client fails to respond within the timeout, the connection is closed and 
 
 This mechanism helps distinguish between temporary network issues and actual logouts.
 
-1. **Notifying friends about presence changes**
+#### Notifying friends about presence changes
 
 To allow friends to see each other’s presence updates, the system can use message queues or pub/sub channels.
 
@@ -161,7 +165,7 @@ Each pair has a subscription channel for presence updates. When the presence ser
 
 ---
 
-**Service Discovery**
+### Service Discovery
 
 The purpose of having **Service Discovery** is to provide the client with the most optimal server that it can connect to based on different criteria such as geo location.
 
@@ -175,7 +179,7 @@ Example flow would be:
 
 ---
 
-### Step 4: Wrap up
+## Step 4: Wrap up
 
 If there is more time we can talk about:
 

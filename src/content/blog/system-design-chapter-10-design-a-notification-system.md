@@ -11,13 +11,15 @@ seriesOrder: 10
 > System Design Interview series: Chapter 10 - Design A Notification System
 > Summarizing chapters
 
+## Notification formats
+
 There are three types of notification formats:
 
 - Mobile push notifications
 - SMS notifications
 - Email notifications
 
-### Step 1. Understand the problem and define the scope
+## Step 1. Understand the problem and define the scope
 
 Asking the following questions will help us establish the scope and remove ambiguities.
 
@@ -34,30 +36,32 @@ Asking the following questions will help us establish the scope and remove ambig
 6. How many notifications are sent out each day?
    1. 10 million mobile, 5 million email, 1 million SMS (from the book).
 
-### Step 2. Propose a high-level design and dive deep
+## Step 2. Propose a high-level design and dive deep
 
-**Different types of notifications**
+### Different types of notifications
 
-1. **iOS push notifications**
+### iOS push notifications
 
 Here, we need three components to send a notification to an iOS user.
 
 - Provider: This component prepares notifications and sends them to the Apple Push Notification Service.
 - Device token: A unique identifier used to send push notifications.
 - Payload: A collection of data, usually in JSON, that is sent to the device.
-1. **Android push notifications**
+### Android push notifications
 
 Mostly, **Firebase Cloud Messaging** is used to send notifications to Android devices.
 
-1. **SMS messaging**
+### SMS messaging
 
 Mostly, a third-party service is used to handle this type of messaging, such as Twilio.
 
-1. **Email**
+### Email
 
 Similar to SMS messaging, third-party services can handle this end-to-end, such as SendGrid.
 
 ---
+
+### Contact info gathering flow
 
 After explaining the different types of notifications, we need to look at the **Contact Info Gathering Flow**.
 
@@ -66,6 +70,8 @@ Because we have to identify the user who is going to subscribe to notifications,
 We might need two tables: one for user information and one for device information, because users may use multiple devices, and we need to know all of them to send notifications.
 
 ---
+
+### Initial sending flow
 
 Let’s see how the sending/receiving part works, at least at the high-level design.
 
@@ -80,6 +86,8 @@ The problems here are:
 3. Performance won’t be great because the notification service might be responsible for generating an HTML template and populating it with user information before calling the third-party library.
 
 ---
+
+### Improved notification architecture
 
 We can improve the system by moving the database and cache into separate services, introducing auto-scaling for the notification service, and establishing queues for each type of notification to decouple the system.
 
@@ -96,7 +104,7 @@ We have separated the database and cache from the notification service. This all
 
 ---
 
-### Step 3: Design deep dive
+## Step 3: Design deep dive
 
 We can enhance the system by increasing its reliability. We have to prevent data loss. One way to do this is by introducing a **Notification Log** that workers update. It serves as durable storage and helps prevent duplicate notifications.
 
@@ -106,32 +114,32 @@ A possible scenario is a retry that causes a notification to be sent more than o
 
 Other important components, such as analytics tracking, notification templates, rate limiting, and notification settings, can be introduced to improve the design.
 
-1. **Notification templates**
+### Notification templates
 
 A notification template is a predefined structure that can be populated with data from the payload and styled. This results in more consistent notifications across users and saves time, since we do not have to generate templates on the fly.
 
-1. **Notification settings**
+### Notification settings
 
 To achieve more granularity, we can create another table in the database and store the device, an opt-in boolean field, and the type of notification. This allows users to disable notifications for specific devices. Before sending notifications, we have to check the opt-in field.
 
-1. **Rate limiting**
+### Rate limiting
 
 Users may receive many notifications, so we should restrict notification volume by rate-limiting requests.
 
-1. **Monitoring**
+### Monitoring
 
 We should monitor the total number of queued notifications. If the number is too large, it means workers are not processing jobs fast enough, so we may need to scale horizontally.
 
-1. **Event tracking/analytics**
+### Event tracking/analytics
 
 This is important because tracking each step allows us to infer business-relevant information. For example, we can track how many users, after receiving a notification, clicked it or unsubscribed.
 
-1. **Authentication**
+### Authentication
 
 We need to authenticate whether a notification can be sent, so an additional layer over the notification service is needed. Using an app key and secret, we can authenticate the sender who is requesting a notification to be sent.
 
 ---
 
-### Step 4: Wrap up
+## Step 4: Wrap up
 
 In this chapter, we designed a notification system that supports push notifications, SMS, and email. To scale and improve reliability, we decoupled notification generation from delivery using message queues and worker services.

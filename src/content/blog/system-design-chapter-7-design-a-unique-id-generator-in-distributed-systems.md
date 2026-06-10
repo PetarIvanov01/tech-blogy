@@ -11,7 +11,7 @@ seriesOrder: 7
 > System Design Interview series: Chapter 7 - Design A Unique ID Generator In Distributed Systems
 > Summarizing chapters
 
-### Step 1: Understand the problem and define the design scope
+## Step 1: Understand the problem and define the design scope
 
 Following the book’s example, the first step is to remove ambiguity by clarifying what we are trying to achieve. Here are a few questions that help define the scope for this system design:
 
@@ -36,7 +36,7 @@ After gathering these requirements, we have:
 
 ---
 
-### Step 2: Propose a high-level architecture
+## Step 2: Propose a high-level architecture
 
 There are a few common approaches to ID generation:
 
@@ -47,7 +47,7 @@ There are a few common approaches to ID generation:
 
 ---
 
-1. **Multi-master replication**
+### Multi-master replication
 
 In this approach, IDs are auto-incremented, but not by 1. Instead, the increment is based on *k*, where *k* is the number of database nodes.
 
@@ -65,7 +65,7 @@ Downsides:
 
 ---
 
-1. **UUIDs**
+### UUIDs
 
 A UUID is a 128-bit identifier made of characters and numbers. Collisions are extremely unlikely, so UUIDs scale well and can be generated independently on each server without coordination.
 
@@ -77,7 +77,7 @@ Cons for our use case:
 
 ---
 
-1. **Ticket server**
+### Ticket server
 
 In this approach, a dedicated service generates IDs and keeps track of them. Other services call it whenever they need an ID.
 
@@ -94,7 +94,7 @@ Cons:
 
 ---
 
-1. **Twitter Snowflake approach**
+### Twitter Snowflake approach
 
 Each generated ID consists of multiple parts packed into a 64-bit number:
 
@@ -112,7 +112,7 @@ This approach fits our use case because it:
 
 ---
 
-### Step 3: Deep dive
+## Step 3: Deep dive
 
 For the ID generator, we choose the Twitter Snowflake approach.
 
@@ -136,7 +136,7 @@ This is typically enough, and if we exceed it, the generator can wait for the ne
 
 ---
 
-### Step 4: Wrap up
+## Step 4: Wrap up
 
 We discussed a few methods:
 

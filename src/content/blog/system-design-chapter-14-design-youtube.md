@@ -8,10 +8,11 @@ draft: false
 series: "System Design Interview"
 seriesOrder: 14
 ---
+
 > System Design Interview series: Chapter 14 - Design YouTube
 > Summarizing chapters
 
-### Step 1: Understand the problem and establish a scope
+## Step 1: Understand the problem and establish a scope
 
 YouTube as a product is massive; it has a lot of features, such as watching, creating videos, commenting, sharing, etc. On an interview that lasts 45 - 60 minutes, it’s impossible to cover all of them, so let’s ask the most important questions and collect the most important requirements.
 
@@ -41,7 +42,7 @@ For video retrieval, we would store our data in CDNs across the globe, so we can
 
 5 mil _ 5 videos/day _ 0.3 GB \* 0.02$ (assume per GB) ⇒ 150 000$ per day
 
-### Step 2: High-level architecture
+## Step 2: High-level architecture
 
 In the high-level design, we are going to use Content Delivery Networks (CDNs), which are globally distributed edge servers that cache and deliver media content close to users. CDNs allow us to store and stream videos efficiently, reducing latency, bandwidth costs, and load on our core infrastructure.
 
@@ -60,7 +61,7 @@ Good and interesting topics to be explained in the high-level design are:
 
 ![Chapter 14 Design YouTube figure 2](/images/system-design/chapter-14-design-youtube/2.png)
 
-**Flow of uploading:**
+### Flow of uploading:
 
 1. User uploads the video to the original storage.
 
@@ -111,7 +112,7 @@ When a user watches a video on YouTube, playback works as follows:
 
 Choosing the appropriate adaptive streaming protocol is important, as device and browser support vary. In practice, supporting both HLS and DASH ensures compatibility across a wide range of devices.
 
-### Step 3: Deep Dive
+## Step 3: Deep Dive
 
 Before diving into the upload and streaming flows, let’s first examine video transcoding.
 
@@ -150,7 +151,7 @@ DAGs are good because:
 
 Let’s dig into the components of this diagram. It has 6 different stages/components that the video is about to pass.
 
-**Preprocessor**
+### Preprocessor
 
 There are a few steps within the preprocessor algorithm:
 
@@ -160,7 +161,7 @@ There are a few steps within the preprocessor algorithm:
 
 ---
 
-**Dag Scheduler**
+### Dag Scheduler
 
 The scheduler splits the DAG into different job/tasks and puts them into a queue for the resource manager.
 
@@ -185,7 +186,7 @@ We can utilize parallelization for Stage 2 of the video.
 
 ---
 
-**Resource manager**
+### Resource manager
 
 Its responsibility is to manage the available resources efficiently. It has 3 queues and a task scheduler; the scheduler uses the queues to prepare the work for the workers and pass them the necessary information.
 
@@ -199,19 +200,19 @@ Task Scheduler it selectes the best mapping between worker and task and schedule
 
 ---
 
-**Task workers**
+### Task workers
 
 As we can see on the figure above, task workers runs the task that are scheduled by the Task scheduler.
 
 ---
 
-**Temporary storage**
+### Temporary storage
 
 We store the blob of the audio, video, or other type of information into the temporary storage until the whole processing is complete.
 
 ---
 
-**Encoded Video**
+### Encoded Video
 
 Finally, we get the video in an encoded format, for example, `video_720p.mp4`.
 
@@ -226,10 +227,10 @@ Finally, we get the video in an encoded format, for example, `video_720p.mp4`.
 - Retry transient failures with backoff, abort and return clear errors for non-recoverable faults.
 - Make nodes idempotent and deterministic so restarts and caching work reliably.
 
-### Step 4: Wrap up
+## Step 4: Wrap up
 
 If there is more time we can check out:
 
 - Horizontally scale the API servers as they are stateless.
 - Scale the database (replication and sharding)
-- Live streaming (but first I have to read about it :D)
+- Live streaming (but first I have to read about it)

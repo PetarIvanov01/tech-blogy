@@ -11,6 +11,8 @@ seriesOrder: 9
 > System Design Interview series: Chapter 9 - Design A Web Crawler
 > Summarizing chapters
 
+## Crawler overview
+
 Web crawlers are widely used when it comes to finding resources on websites. They can discover different resources such as text, links, videos, documents, and parse/extract the necessary data, then store it in persistent storage. How they work is by finding a website, collecting all links in a queue-like structure, and going deeper until there are no more links or another condition is met.
 
 ![Chapter 9 Design A Web Crawler figure 1](/images/system-design/chapter-9-design-a-web-crawler/1.png)
@@ -28,7 +30,7 @@ They can serve for different things:
 
 ---
 
-### Step 1: Understand the problem and define a scope
+## Step 1: Understand the problem and define a scope
 
 A quick design would be:
 
@@ -61,7 +63,7 @@ There are a few other notes that should be considered when talking with the inte
 
 ---
 
-### Step 2: Propose a high-level design and dive into it.
+## Step 2: Propose a high-level design and dive into it.
 
 The design provided below is taken from different studies (The image is from the book).
 
@@ -88,7 +90,7 @@ The design provided below is taken from different studies (The image is from the
 
 ---
 
-### Step 3: Deep Dive
+## Step 3: Deep Dive
 
 Starting with the algorithms for web traversing. We have two options: DFS or BFS.
 
@@ -162,7 +164,7 @@ Another problem might be websites that are so-called “spider traps” - They c
 
 ---
 
-### Step 4. Wrap up
+## Step 4. Wrap up
 
 Having more time, we can talk about:
 

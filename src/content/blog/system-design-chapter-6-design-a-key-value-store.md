@@ -11,6 +11,8 @@ seriesOrder: 6
 > System Design Interview series: Chapter 6 - Design A Key-Value Store
 > Summarizing chapters
 
+## Key-value store basics
+
 A key-value store is a non-relational database that stores data as a collection of key–value pairs, where each unique key is associated with a single value.
 
 Keys must be unique and are typically strings, though they may represent hashed values depending on the system design. For example:
@@ -22,13 +24,13 @@ Keys must be unique and are typically strings, though they may represent hashed 
 
 The value can be any data that can be serialized, such as strings, numbers, JSON objects, etc.
 
-### Single-server key-value store
+## Single-server key-value store
 
 A single-server key-value store is easy to implement because all data is managed by one machine. Frequently accessed data is typically stored in memory for fast access, while less frequently accessed data is persisted on disk.
 
 When memory is limited, techniques such as data compression can be used to increase the amount of data stored in memory. However, this design does not scale well and introduces a single point of failure, making it unsuitable for large-scale or highly available systems.
 
-### CAP theorem
+## CAP theorem
 
 **Consistency**: clients should be working with the same data at the same time across different nodes/instances
 
@@ -48,9 +50,9 @@ If we prioritize availability, the system will continue to return responses even
 
 ---
 
-### System components
+## System components
 
-1. **Data partition**
+### Data partition
 
 At scale, one key value store service won’t be able to handle/store all of the information within in-memory or on disk, also It will be hard to handle a lot of concurrent requests, and it will be a single point of failure. That’s why we need to partition the data within multiple nodes/services. This is done by splitting the data and storing pieces on different nodes.
 
@@ -71,7 +73,7 @@ Also, by using virtual nodes, each server is responsible for multiple smaller pa
 
 ---
 
-1. **Data replication**
+### Data replication
 
 To make data available across multiple nodes, replication is used. Each key is replicated to N unique servers, where N is the replication factor. After finding the main server for a key on the hash ring, replicas are placed on the next N−1 unique servers encountered while moving clockwise.
 
@@ -81,7 +83,7 @@ Also, to prevent data loss in case of large-scale failures, such as data center 
 
 ---
 
-1. **Consistency**
+### Consistency
 
 Because data is replicated across multiple nodes, the system must ensure that reads and writes have access to the same data. This is controlled using three parameters:
 
@@ -97,30 +99,33 @@ When **W + R > N**, the system guarantees strong consistency because every read 
 
 ---
 
-1. **Consistency models**
+### Consistency models
 
 There are different types of consistencies:
 
-1. **Strong consistency**
-   The system guarantees that a client will never read stale data. After a successful write, all subsequent reads return the latest value. This often comes at the cost of higher latency, since the system may need to wait for replicas to perform the write before serving reads.
+#### Strong consistency
 
-2. **Weak consistency**
-   The system does not guarantee that a read will return the most recent write. Clients may see stale data, and there is no guarantee on when replicas become consistent.
+The system guarantees that a client will never read stale data. After a successful write, all subsequent reads return the latest value. This often comes at the cost of higher latency, since the system may need to wait for replicas to perform the write before serving reads.
 
-3. **Eventual consistency**
-   The system guarantees that, if no new updates are made, all replicas will eventually get to the same value. Reads may return stale data in the short term, but consistency is achieved over time.
+#### Weak consistency
+
+The system does not guarantee that a read will return the most recent write. Clients may see stale data, and there is no guarantee on when replicas become consistent.
+
+#### Eventual consistency
+
+The system guarantees that, if no new updates are made, all replicas will eventually get to the same value. Reads may return stale data in the short term, but consistency is achieved over time.
 
 As I mentioned, strong consistency may be ensured by frequently blocking read operations to prevent stale reads, which is undesirable because waiting introduces latency. For the example in this chapter, eventual consistency is chosen, which is also used in other stores, such as Casandra and DynamoDB.
 
 ---
 
-1. **Inconsistency resolution: versioning**
+### Inconsistency resolution: versioning
 
 Replicating data across multiple servers improves availability, but it can lead to inconsistency when replicas are not perfectly synchronized. In an eventually consistent system, different replicas may temporarily store different values for the same key.
 
 For example, replicas A and B initially store the same data: `{ "name": "Petar" }`. If a write updates replica A to `{ "name": "Gosho" }` and another writes independently updates replica B to `{ "name": "Mitko" }`The replicas now hold different values for the same key. As a result, read operations may return different results depending on which replica is queried.
 
-**Vector clocks**
+### Vector clocks
 
 This is metadata attached to a data item and consists of a set of pairs in the form
 `[server_id, number_of_updates]`. Each server maintains its own counter.
@@ -150,9 +155,9 @@ overhead but may weaken the ability to detect all conflicts. (Some paper from Am
 
 ---
 
-1. **Handling failures**
+### Handling failures
 
-**Failure detection**
+#### Failure detection
 
 In distributed systems, to detect if a service is down, we would need at least two sources of information.
 
@@ -162,7 +167,7 @@ If a node detects that another node’s heartbeat has not been updated for a cer
 
 ---
 
-1. **System design architecture**
+### System design architecture
 
 ![Chapter 6 Design A Key-Value Store figure 2](/images/system-design/chapter-6-design-a-key-value-store/2.png)
 
@@ -185,15 +190,15 @@ system relies on replication and eventual consistency to provide high availabili
 
 ---
 
-1. **Write and Read Paths**
+### Write and Read Paths
 
-### Write path
+#### Write path
 
 When a client issues a write request, it sends the request to the coordinator node. The coordinator uses consistent hashing to identify the N replica nodes responsible for the key and forwards the write request to them.
 
 Once the coordinator receives acknowledgments from W replicas, the write is considered successful, and a response is returned to the client.
 
-### Read path
+#### Read path
 
 When a client issues a read request, it contacts the coordinator for the request. The coordinator identifies the N replica nodes responsible for the key and sends read requests to them.
 

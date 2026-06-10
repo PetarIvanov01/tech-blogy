@@ -30,7 +30,7 @@ In this design, we have to focus on adding files to the drive, downloading files
 
 ---
 
-**Back-of-the-envelope estimation**
+### Back-of-the-envelope estimation
 
 1. Assuming we have 50 mil signed up users and 10 mil DAU.
 2. Each user gets 10 GB of free space and 2 uploads per day.
@@ -67,36 +67,40 @@ One PostgreSQL or MySQL will handle the storage for the relational data, and we 
 
 ### API (Initial Design)
 
-**Upload APIs**
+### Upload APIs
 
-1. Simple Upload
-   - Used for small files and stable network conditions.
-   - The client uploads the entire file in a single request.
+#### Simple Upload
+
+- Used for small files and stable network conditions.
+- The client uploads the entire file in a single request.
 
 ```javascript
 POST /files/upload
 Body: <file data>
 ```
 
-2. Resumable Upload
-   - Used for large files or unreliable networks.
-   - The upload process is split into multiple steps.
-   1. Create upload session
+#### Resumable Upload
+
+- Used for large files or unreliable networks.
+- The upload process is split into multiple steps.
+
+**Create upload session**
 
 ```javascript
 POST /files/upload?uploadType=resumable
 Response: resumable upload URL
 ```
 
-    1. Upload file chunks
+**Upload file chunks**
 
 ```javascript
 PUT <resumable-upload-url>
 Body: <file chunk>
 ```
 
-    1. Resume upload if interrupted
-    - Client queries upload state and continues from the last uploaded chunk.
+**Resume upload if interrupted**
+
+- The client queries upload state and continues from the last uploaded chunk.
 
 ### Download API
 
@@ -138,7 +142,7 @@ We have a load balancer that servers request from clients to API servers, and tw
 
 ---
 
-**Sync Conflicts**
+### Sync Conflicts
 
 One of the core features of the system is shared file access, where multiple users can edit the same file. This introduces the possibility of synchronization conflicts.
 
@@ -234,14 +238,14 @@ The figure above shows a simplified metadata database schema. It includes only t
 
 Two requests are sent in parallel when a new file is added: one to create file metadata and one to upload the actual file content. Both requests come from Client 1.
 
-**Add file metadata**
+### Add file metadata
 
 1. Client 1 sends a request to create metadata for the new file.
 2. The API server stores the metadata in the Metadata DB and sets the file upload status to **“pending.”**
 3. The API server notifies the notification service that a new file is being uploaded.
 4. The notification service informs relevant clients (for example, Client 2) that a new file upload is in progress.
 
-**Upload file to cloud storage**
+### Upload file to cloud storage
 
 1. Client 1 uploads the file content to the block servers.
 2. Block servers split the file into blocks, compress and encrypt each block, and upload them to cloud storage.
@@ -285,11 +289,11 @@ Although both approaches are viable, we choose long polling for the following re
 
 ---
 
-**Saving Storage Space**
+### Saving Storage Space
 
 To reduce storage costs while supporting file versioning and reliability, the system applies a few optimizations. Identical data blocks are de-duplicated using hash values, preventing redundant storage. Infrequently accessed data is moved to cold storage, which is significantly cheaper and optimized for archival use.
 
-**Failure Handling**
+### Failure Handling
 
 Failures are expected in large-scale systems, so components are designed to be fault-tolerant. Load balancers, API servers, caches, and queues rely on replication and automatic failover. Stateless services allow traffic to be redirected when failures occur. Storage systems replicate data across regions to ensure durability. When a component fails, healthy replicas take over, and the system recovers without user-visible data loss.
 

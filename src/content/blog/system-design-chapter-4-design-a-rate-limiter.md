@@ -11,6 +11,8 @@ seriesOrder: 4
 > System Design Interview series: Chapter 4 - Design A Rate Limiter
 > Summarizing chapters
 
+## Rate limiter overview
+
 In a network environment, a rate limiter is used to control the traffic sent by a client or a service.
 
 It’s used to enforce constraints on the number of requests allowed to be processed within a certain period of time. If the requests exceed the allowed amount, they will be rejected.
@@ -27,7 +29,7 @@ There are different places where the rate-limiting application code can live and
 
 When it comes to implementation, there are different algorithms that each have pros and cons.
 
-### Fix-sized window
+## Fix-sized window
 
 The time is sliced in fix-sized windows where each window has a predefined allowed throughput (counter).
 
@@ -57,7 +59,7 @@ Cons:
 
 ---
 
-### Token Bucket Algorithm
+## Token Bucket Algorithm
 
 The token bucket algorithm has a predefined bucket capacity. The refiller adds requests/tokens at a certain interval to the bucket until the capacity is reached. Once the bucket is full, new tokens overflow.
 
@@ -84,7 +86,7 @@ The token bucket allows bursts because tokens accumulate during idle periods and
 
 ---
 
-### Sliding Window Log Algorithm
+## Sliding Window Log Algorithm
 
 This algorithm fixes the issues with the Fixed window algorithm by making the window dynamic. We are persisting the timestamp of each request in a cache like Redis. When a new request comes, first we remove the outdated timestamps within the cache (timestamps older than the start of the current window). Then, the request timestamp is added to the cache, and if the size of the cache, a.k.a window, is greater than the allowed, we throw away the request, otherwise we accept it.
 
@@ -98,7 +100,7 @@ Cons:
 
 ---
 
-### High-level Architecture of RM
+## High-level Architecture of RM
 
 At a high level, we need a counter that keeps track of how many requests the user/identifier made so far. If the counter is greater than the limit, further requests are rejected.
 
@@ -106,7 +108,7 @@ On a big scale, these counters are stored in some cache because the access is fa
 
 ---
 
-### Deep dive
+## Deep dive
 
 Depending on the rate limiter, there are rules (files) where we can define and configure capacity, window size, and all of this information that the rate limit needs to work for our needs.
 
@@ -126,7 +128,7 @@ It’s possible when the RM declines a request to put it for later processing, s
 
 ---
 
-### In a Distributed Environment
+## In a Distributed Environment
 
 So far, I was working with a single server environment; however, when it comes to rate-limiting multiple servers in a distributed environment. Two major problems occur.
 
@@ -181,7 +183,7 @@ One way to address this is sticky sessions, where all requests from a user are r
 
 ---
 
-### Performancy & Metrics
+## Performancy & Metrics
 
 I did not understand much from the first part (performance), only this:
 

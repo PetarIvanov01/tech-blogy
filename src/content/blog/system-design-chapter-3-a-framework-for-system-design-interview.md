@@ -18,7 +18,7 @@ The framework consists of 4 steps, which I will define below.
 
 ---
 
-**Step 1. Understand the problem, collect requirements, discuss the scope of the system.**
+## Step 1. Understand the problem, collect requirements, discuss the scope of the system.
 
 In this step, the whole point is to gather as much of the most important information as possible so you can define the scope of the design.
 
@@ -35,7 +35,7 @@ Many other questions can probably come up throughout the process. However, I hav
 
 ---
 
-**Step 2. Create a high-level scope of the system design and discuss it with the interviewer until you both agree on it.**
+## Step 2. Create a high-level scope of the system design and discuss it with the interviewer until you both agree on it.
 
 In this step, the idea is to draw and discuss your ideas about what the system should look like with the interviewer. I have to take into account all the information from the previous step and define the structure, then ask questions to see whether the interviewer agrees with me. If we have any misalignment, I should fix it in this step, because later it’s too late.
 
@@ -45,7 +45,7 @@ In this step, I can also use the “back of the envelope” technique to quantif
 
 ---
 
-**Step 3. Deep into the design and focus on critical components.**
+## Step 3. Deep into the design and focus on critical components.
 
 After we both agree on the high-level design that I sketched out, I have to dig into the more interesting parts. For example, I can talk about the communication protocols that are going to be used.
 
@@ -65,7 +65,7 @@ I am not sure if it’s a good idea. I have just heard it somewhere.
 
 ---
 
-**Step 4. Wrap up.**
+## Step 4. Wrap up.
 
 In this step, the discussion is more open. Still, I can outline:
 

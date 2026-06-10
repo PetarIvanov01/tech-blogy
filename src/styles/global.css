@@ -66,12 +66,20 @@
     @apply m-0 w-full max-w-none text-[clamp(1.03rem,2.5vw,1.25rem)] leading-[1.7] text-muted;
   }
 
+  .hero-copy-small {
+    @apply m-0 w-full max-w-none text-[clamp(0.78rem,1.6vw,0.92rem)] leading-[1.65] text-muted;
+  }
+
+  .hero-copy-small a {
+    @apply font-bold text-link underline decoration-current decoration-1 underline-offset-[0.18em] hover:text-link-hover focus-visible:text-link-hover;
+  }
+
   .markdown-content {
-    @apply w-full max-w-[72ch] rounded-xl border border-line bg-paper px-[clamp(1rem,3vw,2.25rem)] pb-20 pt-8;
+    @apply w-full max-w-[84ch] rounded-xl border border-line bg-paper px-[clamp(1rem,3vw,2.25rem)] pb-20 pt-8;
   }
 
   .article-layout {
-    @apply mt-8 grid gap-10 lg:mt-10 lg:grid-cols-[minmax(0,72ch)_minmax(16rem,1fr)] lg:items-start;
+    @apply mt-8 grid gap-10 lg:mt-10 lg:grid-cols-[minmax(0,84ch)_minmax(16rem,1fr)] lg:items-start;
   }
 
   .toc-shell {

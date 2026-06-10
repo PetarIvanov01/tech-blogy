@@ -11,7 +11,7 @@ seriesOrder: 8
 > System Design Interview series: Chapter 8 - Design A URL Shortener
 > Summarizing chapters
 
-### Step 1: Understand the problem and define the scope
+## Step 1: Understand the problem and define the scope
 
 Let’s first obtain more information by asking questions about the problem.
 
@@ -39,7 +39,7 @@ We also can use back of the envelope technique to gather more information about 
 
 ---
 
-### Step 2: Propose high-level design and agree on it
+## Step 2: Propose high-level design and agree on it
 
 First we have to define the API Endpoints that the service will expose.
 
@@ -52,7 +52,7 @@ For this service, we need only two API endpoints:
 
 ---
 
-**URL Redirects**
+### URL Redirects
 
 There are two status codes used to redirect the client:
 
@@ -61,11 +61,11 @@ There are two status codes used to redirect the client:
 
 ---
 
-**URL Shortening**
+### URL Shortening
 
 To shorten a long URL, we need additional logic. One approach is to use a hash function that takes the long URL as input and generates a hash. The problem with this approach is that we cannot control the length of the hash output. In our case, we need only the first 7 characters. If we simply take the first 7 characters, we may end up with duplicate shortened URLs.
 
-### Step 3: Design deep dive
+## Step 3: Design deep dive
 
 Let’s define the table schema that will be used in the database.
 
@@ -105,14 +105,14 @@ We end up with: **2TX**
 
 Both approaches are fine and can get the job done.
 
-**Hash + collision resolution**
+### Hash + collision resolution
 
 - Fixed short URL length
 - There is no need to have ID generator, the hash function creates the hash value
 - Collisions are expected and should be handled
 - It does not depend on anything, so the tracking of the next short URL is not possible
 
-**Base 62 conversion**
+### Base 62 conversion
 
 - The length of the short URL is not fixed.
 - Needs to have ID generator.
@@ -121,7 +121,7 @@ Both approaches are fine and can get the job done.
 
 ---
 
-**How shortening works**
+### How shortening works
 
 For this we are going to use BASE 62 conversion.
 
@@ -136,7 +136,7 @@ If we need to scale the service, we would need to create destributed ID generato
 
 ---
 
-**How redirecting works**
+### How redirecting works
 
 1. Client clicks on a short URL - https://tinyurl.com/321dsa
     1. (If the URL was previously requested and the response status was 301, the browser will use its cached long URL)
@@ -147,7 +147,7 @@ If we need to scale the service, we would need to create destributed ID generato
 
 ---
 
-### Step 4 - Wrap up
+## Step 4 - Wrap up
 
 We looked at the API design, data schema, hash functions/ base 62 conversion, shortening, and redirecting.
 

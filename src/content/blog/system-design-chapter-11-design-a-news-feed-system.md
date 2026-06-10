@@ -11,7 +11,7 @@ seriesOrder: 11
 > System Design Interview series: Chapter 11 - Design A News Feed System
 > Summarizing chapters
 
-### Step 1: Understand the problem and define the scope
+## Step 1: Understand the problem and define the scope
 
 Start by asking a few clarifying questions to remove ambiguity.
 
@@ -26,7 +26,7 @@ Start by asking a few clarifying questions to remove ambiguity.
 5. What types of content should the feed support?
    1. Text, images, and videos.
 
-### Step 2: High-level design
+## Step 2: High-level design
 
 There are two main workflows:
 
@@ -50,17 +50,18 @@ A typical high-level architecture includes:
   - **Fanout Service**: builds or updates users’ news feeds and stores results in a cache layer.
   - **Notification Service**: notifies users that new content is available (optional, depending on product requirements).
 
-### Step 3: Design deep dive
+## Step 3: Design deep dive
 
 Below is the design approach described in the book.
 
 ![Chapter 11 Design A News Feed System figure 1](/images/system-design/chapter-11-design-a-news-feed-system/1.png)
 
-1. **Web servers**
+### Web servers
+
    - They enforce **authentication** and **rate limiting**.
    - Rate limiting protects downstream services (Fanout Service, Notification Service, etc.) from spikes.
    - It should also limit the number of posts a user can create within a time window.
-2. **Fanout Service (building feeds)**
+### Fanout Service (building feeds)
    - The Fanout Service updates friends’ feeds when new posts arrive.
    - It uses a **graph database** (or another graph representation) to store the follower/friend relationships as a directed graph. This makes it efficient to look up a user’s neighbors (followers/followees), traverse relationships, and support features like recommendations.
    - After it gets the relevant user IDs, it fetches user settings (for example, muted users) and then schedules background work.
@@ -115,7 +116,7 @@ The flow is similar up to the **web servers**. For a read request:
 
 ---
 
-### Step 4: Wrap-up
+## Step 4: Wrap-up
 
 If there is more time, we can go deeper into scalability topics:
 
