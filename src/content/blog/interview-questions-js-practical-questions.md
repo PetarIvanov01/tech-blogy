@@ -109,7 +109,7 @@ Synchronously defined code is executed in order, and each operation blocks the t
 
 ### **What are arrow functions and how are they different from regular functions?**
 
-Arrow functions are a different syntax to define functions - (args) ⇒ { /_ body of the function _/}, we can omit the brackets and write the body in one line, returning whatever the body returns.
+Arrow functions are a different syntax to define functions: `(args) => { /* body of the function */ }`. We can omit the braces and write the body on one line, returning whatever the body evaluates to.
 
 They do not have context, and are using the context of the outer function declaration or the global scope.
 
