@@ -32,11 +32,11 @@ const articleLabel = series && post.data.seriesOrder
 
 <Layout title={`${post.data.title} | Petar I`} description={post.data.description}>
 	<main class="page-shell">
-		<header class="grid gap-4 border-b border-line py-[clamp(2rem,7vw,4.5rem)] pb-8">
+		<header class="grid gap-4 border-b border-line py-[clamp(1.5rem,7vw,4.5rem)] pb-6 sm:pb-8">
 			<p class="eyebrow">{articleLabel}</p>
 			<h1 class="article-title">{post.data.title}</h1>
 			<p class="hero-copy">{post.data.description}</p>
-			<div class="flex flex-wrap gap-3 font-mono text-[0.82rem] text-muted uppercase">
+			<div class="flex flex-wrap gap-x-3 gap-y-2 font-mono text-[0.78rem] leading-[1.5] text-muted uppercase sm:text-[0.82rem]">
 				{formattedDate && <time datetime={post.data.pubDate.toISOString()}>{formattedDate}</time>}
 				{post.data.tags.map((tag) => <span>{tag}</span>)}
 			</div>

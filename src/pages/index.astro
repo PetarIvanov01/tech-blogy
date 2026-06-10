@@ -15,7 +15,7 @@ const homepageItems = getHomepageItems(posts);
 	description="A personal blog for Markdown-based technical articles."
 >
 	<main class="page-shell">
-		<section class="grid gap-4 py-[clamp(2rem,8vw,5rem)] pb-[clamp(1.8rem,5vw,3.4rem)]" aria-labelledby="page-title">
+		<section class="grid gap-4 py-[clamp(1.5rem,8vw,5rem)] pb-[clamp(1.6rem,5vw,3.4rem)]" aria-labelledby="page-title">
 			<h1 id="page-title" class="hero-title">Petar I</h1>
 			<p class="hero-copy">
 				These are my personal technical notes: some are distilled from long AI-assisted conversations and shaped into articles, while others are written entirely by me.
@@ -28,7 +28,7 @@ const homepageItems = getHomepageItems(posts);
 		<section id="articles" aria-label="Articles">
 			<div class="mb-4 flex flex-wrap gap-2" aria-label="Content filters">
 				<button
-					class="content-filter rounded-full border border-ink bg-ink px-3 py-1.5 font-mono text-xs text-panel uppercase"
+					class="content-filter rounded-full border border-ink bg-ink px-3 py-2 font-mono text-[0.74rem] leading-none text-panel uppercase sm:py-1.5 sm:text-xs"
 					type="button"
 					data-filter="all"
 					aria-pressed="true"
@@ -36,7 +36,7 @@ const homepageItems = getHomepageItems(posts);
 					All
 				</button>
 				<button
-					class="content-filter rounded-full border border-line px-3 py-1.5 font-mono text-xs text-muted uppercase hover:text-ink focus-visible:text-ink"
+					class="content-filter rounded-full border border-line px-3 py-2 font-mono text-[0.74rem] leading-none text-muted uppercase hover:text-ink focus-visible:text-ink sm:py-1.5 sm:text-xs"
 					type="button"
 					data-filter="article"
 					aria-pressed="false"
@@ -44,7 +44,7 @@ const homepageItems = getHomepageItems(posts);
 					Articles
 				</button>
 				<button
-					class="content-filter rounded-full border border-line px-3 py-1.5 font-mono text-xs text-muted uppercase hover:text-ink focus-visible:text-ink"
+					class="content-filter rounded-full border border-line px-3 py-2 font-mono text-[0.74rem] leading-none text-muted uppercase hover:text-ink focus-visible:text-ink sm:py-1.5 sm:text-xs"
 					type="button"
 					data-filter="folder"
 					aria-pressed="false"

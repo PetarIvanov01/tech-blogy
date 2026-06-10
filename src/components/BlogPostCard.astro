@@ -28,14 +28,14 @@ const formattedDate = pubDate
   <a
     href={href}
     class:list={[
-      'group grid gap-2.5 text-inherit no-underline',
+      'group grid min-w-0 gap-3 text-inherit no-underline',
       isSeries
         ? 'rounded-xl border border-line-strong bg-paper px-4 py-5 shadow-sm transition-colors hover:bg-panel-muted focus-visible:bg-panel-muted sm:px-5'
-        : 'py-6',
+        : 'py-5 sm:py-6',
     ]}
   >
     {(label || formattedDate) && (
-      <div class="flex flex-wrap items-center gap-2 font-mono text-xs text-muted uppercase">
+      <div class="flex flex-wrap items-center gap-2 font-mono text-[0.74rem] leading-[1.45] text-muted uppercase sm:text-xs">
         {label && <span class={isSeries ? 'rounded-full border border-line bg-panel px-2 py-1' : ''}>{label}</span>}
         {
           pubDate && formattedDate ? (
@@ -46,13 +46,13 @@ const formattedDate = pubDate
         }
       </div>
     )}
-    <h2 class="m-0 text-[clamp(1.35rem,3vw,2rem)] leading-[1.12] text-ink group-hover:underline group-focus-visible:underline underline-offset-[0.18em]">{title}</h2>
-    <p class="m-0 w-full max-w-none leading-[1.65] text-muted">{description}</p>
+    <h2 class="m-0 text-[clamp(1.2rem,6vw,2rem)] leading-[1.18] text-ink group-hover:underline group-focus-visible:underline underline-offset-[0.18em] break-words">{title}</h2>
+    <p class="m-0 w-full max-w-[76ch] text-[0.98rem] leading-[1.65] text-muted sm:text-base">{description}</p>
     {
       tags.length > 0 && (
         <ul class="m-0 flex list-none flex-wrap gap-2 p-0" aria-label="Tags">
           {tags.map((tag) => (
-            <li class="rounded-full border border-line px-2 py-1 font-mono text-xs text-muted">{tag}</li>
+            <li class="rounded-full border border-line px-2 py-1 font-mono text-[0.74rem] leading-[1.35] text-muted sm:text-xs">{tag}</li>
           ))}
         </ul>
       )

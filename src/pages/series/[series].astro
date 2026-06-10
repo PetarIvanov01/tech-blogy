@@ -31,11 +31,11 @@ const chapterCount = posts.length;
 
 <Layout title={`${series.title} | Petar I`} description={series.description}>
 	<main class="page-shell">
-		<section class="grid gap-4 py-[clamp(2rem,8vw,5rem)] pb-[clamp(1.8rem,5vw,3.4rem)]" aria-labelledby="page-title">
+		<section class="grid gap-4 py-[clamp(1.5rem,8vw,5rem)] pb-[clamp(1.6rem,5vw,3.4rem)]" aria-labelledby="page-title">
 			<p class="eyebrow">Series</p>
 			<h1 id="page-title" class="hero-title">{series.title}</h1>
 			<p class="hero-copy">{series.description}</p>
-			<p class="m-0 font-mono text-[0.82rem] text-muted uppercase">
+			<p class="m-0 font-mono text-[0.78rem] leading-[1.5] text-muted uppercase sm:text-[0.82rem]">
 				{series.displayDate && <>{series.displayDate} · </>}
 				{chapterCount} {chapterCount === 1 ? 'chapter' : 'chapters'}
 			</p>
